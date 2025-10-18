@@ -2,8 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
 import Button from '@/components/ui/Button';
+import CloseButton from '@/components/ui/CloseButton';
+import SectionHeader from '@/components/layout/SectionHeader';
+import StatCard from '@/components/ui/StatCard';
 import PageTitle from '@/components/ui/PageTitle';
 import AuthBranding from '@/app/auth/components/AuthBranding';
 import OnboardingSkeleton from './components/OnboardingSkeleton';
@@ -11,8 +14,10 @@ import { Validation } from '@/components/shared';
 
 export default function Onboarding() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedSubOptions, setSelectedSubOptions] = useState<string[]>([]); // For Pharmacy sub-options
   const [customCategory, setCustomCategory] = useState<string>('');
   const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
+  const [showSubOptionsOverlay, setShowSubOptionsOverlay] = useState<boolean>(false); // To show/hide sub-options overlay
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -84,6 +89,15 @@ export default function Onboarding() {
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
     
+    // Show sub-options if Pharmacy is selected
+    if (categoryId === 'healthcare') {
+      setShowSubOptionsOverlay(true);
+      setSelectedSubOptions([]); // Reset sub-options when Pharmacy is selected
+    } else {
+      setShowSubOptionsOverlay(false);
+      setSelectedSubOptions([]); // Clear sub-options for other categories
+    }
+    
     if (categoryId === 'other') {
       setShowCustomInput(true);
     } else {
@@ -92,10 +106,34 @@ export default function Onboarding() {
     }
   };
 
+  // Handle sub-option selection for Pharmacy
+  const handleSubOptionSelect = (option: string) => {
+    setSelectedSubOptions(prev => {
+      if (prev.includes(option)) {
+        // Remove option if already selected
+        return prev.filter(item => item !== option);
+      } else {
+        // Add option if not selected
+        return [...prev, option];
+      }
+    });
+  };
+
   const handleContinue = () => {
     if (selectedCategory) {
+      let categoryToSend = selectedCategory;
+      
       // If "Other" is selected, use the custom category name
-      const categoryToSend = selectedCategory === 'other' ? customCategory : selectedCategory;
+      if (selectedCategory === 'other') {
+        categoryToSend = customCategory;
+      }
+      
+      // If Pharmacy is selected with sub-options, append them to the category
+      if (selectedCategory === 'healthcare' && selectedSubOptions.length > 0) {
+        const subOptions = selectedSubOptions.join(',');
+        categoryToSend = `healthcare:${subOptions}`;
+      }
+      
       // Redirect to the register page with the selected category as a query parameter
       router.push(`/auth/register?userCategory=${encodeURIComponent(categoryToSend)}&businessName=${encodeURIComponent(businessName)}&email=${encodeURIComponent(email)}`);
     }
@@ -103,21 +141,9 @@ export default function Onboarding() {
 
   const categories = [
     { 
-      id: 'retail', 
-      name: 'Retail', 
-      description: 'Manage inventory, sales, and customer relationships',
-      icon: '🏪'
-    },
-    { 
-      id: 'supplier', 
-      name: 'Supplier', 
-      description: 'Supply products to retailers and businesses',
-      icon: '📦'
-    },
-    { 
       id: 'healthcare', 
-      name: 'Healthcare', 
-      description: 'Medical services, clinics, and health providers',
+      name: 'Pharmacy', 
+      description: 'Pharmaceutical services and medication providers',
       icon: '🏥'
     },
     { 
@@ -125,6 +151,12 @@ export default function Onboarding() {
       name: 'Manufacturing', 
       description: 'Production and manufacturing operations',
       icon: '🏭'
+    },
+    { 
+      id: 'construction', 
+      name: 'Construction', 
+      description: 'Building, renovation, and construction services',
+      icon: '🏗️'
     },
     { 
       id: 'developer', 
@@ -145,6 +177,29 @@ export default function Onboarding() {
       icon: '📝'
     }
   ];
+
+  // Sub-options for Pharmacy
+  const pharmacySubOptions = [
+    { 
+      id: 'retail', 
+      name: 'Retail', 
+      description: 'Retail pharmacy services'
+    },
+    { 
+      id: 'supplier', 
+      name: 'Supplier', 
+      description: 'Pharmaceutical supplier services'
+    }
+  ];
+
+  const handleCancelSubOptions = () => {
+    setShowSubOptionsOverlay(false);
+    setSelectedSubOptions([]);
+  };
+
+  const handleConfirmSubOptions = () => {
+    setShowSubOptionsOverlay(false);
+  };
 
   // Show skeleton while loading
   if (isLoading) {
@@ -212,13 +267,14 @@ export default function Onboarding() {
             </p>
           </div>
           
+          {/* Card container — now with relative positioning for overlay */}
           <div 
-            className="p-4 sm:p-6 rounded-[15px] sm:rounded-[20px] border border-[#e1e1e1] flex flex-col"
+            className="p-4 sm:p-6 rounded-[15px] sm:rounded-[20px] border border-[#e1e1e1] flex flex-col relative"
             style={{
               boxShadow: '-5px 5px 50px -5px #e1e1e1'
             }}
           >
-            {/* Scrollable categories container */}
+            {/* Scrollable categories and custom input (NO overlay inside) */}
             <div className="flex-grow overflow-y-auto max-h-96 py-2 px-2">
               <div className="grid grid-cols-2 gap-4">
                 {categories.map(category => (
@@ -256,20 +312,125 @@ export default function Onboarding() {
                     value={customCategory}
                     onChange={(e) => setCustomCategory(e.target.value)}
                     placeholder="Enter your business category"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-50 transition-all"
                   />
                 </div>
               )}
             </div>
+            
+            {/* Sub-options overlay — now outside scrollable area */}
+            {showSubOptionsOverlay && (
+              <div className="absolute inset-0 bg-white rounded-lg p-4 flex flex-col z-10">
+                <StatCard className="flex-grow flex flex-col h-full">
+                  <div className="flex justify-between items-center mb-3">
+                    <SectionHeader 
+                      title="Please specify your business type:"
+                      className="text-lg font-bold"
+                    />
+                  </div>
+                  <div className="h-px bg-[#EAECF0] mt-2 mb-6"></div>
+                  <p className="text-gray-600 mb-8 text-sm">Select all that apply to your business</p>
+                 
+                  <div className="space-y-6 mb-0 flex-grow">
+                    {/* Retail option */}
+                    <div 
+                      className="cursor-pointer"
+                      onClick={() => handleSubOptionSelect('retail')}
+                    >
+                      <StatCard 
+                        className={`p-6 rounded-lg border transition-all ${
+                          selectedSubOptions.includes('retail')
+                            ? 'border-emerald-500 bg-emerald-50'
+                            : 'border-gray-200 hover:border-emerald-300'
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div className={`w-6 h-6 rounded border mr-4 flex items-center justify-center ${
+                            selectedSubOptions.includes('retail')
+                              ? 'bg-emerald-500 border-emerald-500'
+                              : 'border-gray-300'
+                          }`}>
+                            {selectedSubOptions.includes('retail') && (
+                              <CheckOutlined className="text-white text-sm" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-bold text-gray-800 text-xl">Retail</div>
+                            <div className="text-gray-600 mt-2 text-lg">Retail pharmacy services</div>
+                          </div>
+                        </div>
+                      </StatCard>
+                    </div>
+                    
+                    {/* Divider between Retail and Supplier */}
+                    <div className="h-px bg-[#EAECF0]"></div>
+                    
+                    {/* Supplier option */}
+                    <div 
+                      className="cursor-pointer"
+                      onClick={() => handleSubOptionSelect('supplier')}
+                    >
+                      <StatCard 
+                        className={`p-6 rounded-lg border transition-all ${
+                          selectedSubOptions.includes('supplier')
+                            ? 'border-emerald-500 bg-emerald-50'
+                            : 'border-gray-200 hover:border-emerald-300'
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div className={`w-6 h-6 rounded border mr-4 flex items-center justify-center ${
+                            selectedSubOptions.includes('supplier')
+                              ? 'bg-emerald-500 border-emerald-500'
+                              : 'border-gray-300'
+                          }`}>
+                            {selectedSubOptions.includes('supplier') && (
+                              <CheckOutlined className="text-white text-sm" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-bold text-gray-800 text-xl">Supplier</div>
+                            <div className="text-gray-600 mt-2 text-lg">Pharmaceutical supplier services</div>
+                          </div>
+                        </div>
+                      </StatCard>
+                    </div>
+                  </div>
+                </StatCard>
+                
+                <div className="flex justify-center space-x-3 mt-4">
+                  <Button
+                    variant="secondary"
+                    onClick={handleCancelSubOptions}
+                    className="flex-1 max-w-xs h-10 rounded-xl font-semibold"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={handleConfirmSubOptions}
+                    disabled={selectedSubOptions.length === 0}
+                    className="flex-1 max-w-xs h-10 rounded-xl font-semibold disabled:bg-gray-200 disabled:text-gray-500"
+                  >
+                    Confirm Selection
+                  </Button>
+                </div>
+              </div>
+            )}
             
             {/* Sticky Continue button */}
             <div className="sticky bottom-0 bg-white pt-4">
               <Button
                 variant="primary"
                 onClick={handleContinue}
-                disabled={!selectedCategory || (selectedCategory === 'other' && !customCategory.trim())}
+                disabled={
+                  !selectedCategory || 
+                  (selectedCategory === 'other' && !customCategory.trim()) ||
+                  (showSubOptionsOverlay)
+                }
                 className={`w-full h-12 rounded-xl font-semibold text-base transition-all duration-300 transform hover:scale-[1.02] ${
-                  selectedCategory && (selectedCategory !== 'other' || customCategory.trim())
+                  (selectedCategory && 
+                   (selectedCategory !== 'other' || customCategory.trim()) &&
+                   (!showSubOptionsOverlay))
                     ? 'hover:opacity-90 cursor-pointer shadow-lg' 
                     : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                 }`}

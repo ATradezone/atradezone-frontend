@@ -33,19 +33,16 @@ export default function Register() {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      // Show success message
-      setValidationMessage('Registration form submitted successfully');
-      setValidationType('success');
-      setShowValidation(true);
-      
+      // Simulate registration process
       await new Promise(resolve => setTimeout(resolve, 2000));
-      // Handle registration logic here
+      
+      // Redirect to verification page with business name and email
+      router.push(`/account/onboarding/verify?businessName=${encodeURIComponent(values.fullName)}&email=${encodeURIComponent(values.email)}`);
     } catch (error) {
       // Show error message
       setValidationMessage('Registration failed. Please try again.');
       setValidationType('error');
       setShowValidation(true);
-    } finally {
       setLoading(false);
     }
   };
