@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Form, Input, Alert } from 'antd';
+import { Form, Alert } from 'antd';
 import { MailOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import Button from '@/components/ui/Button';
 import PageTitle from '@/components/ui/PageTitle';
 import AuthBranding from '../components/AuthBranding';
 import AuthFormSkeleton from '../components/AuthFormSkeleton';
 import { Validation } from '@/components/shared';
+import Input from '@/components/ui/Input'; // Import custom Input component
 
 export default function ResetPassword() {
   const [form] = Form.useForm();
@@ -146,9 +147,8 @@ export default function ResetPassword() {
                   <Input 
                     prefix={<MailOutlined className="text-gray-400 text-sm sm:text-base" style={{ fontSize: '14px' }} />} 
                     placeholder="Enter your email" 
-                    className="h-10 sm:h-12 rounded-lg text-sm sm:text-base"
-                    size="large"
-                    style={{ paddingLeft: '12px', fontFamily: "'Afacad', sans-serif" }}
+                    className="h-10 sm:h-12 rounded-lg text-sm sm:text-base w-full"
+                    style={{ paddingLeft: '36px', fontFamily: "'Afacad', sans-serif" }} // Adjusted padding to accommodate prefix
                   />
                 </Form.Item>
                 
@@ -159,7 +159,7 @@ export default function ResetPassword() {
                     onClick={() => {
                       form.submit();
                     }}
-                    className="w-full h-10 sm:h-12 rounded-lg text-sm sm:text-base"
+                    className="w-full h-9 sm:h-10 rounded-full text-sm sm:text-base" // Changed h-10 sm:h-12 to h-9 sm:h-10
                     style={{ fontFamily: "'Afacad', sans-serif" }}
                   >
                     {loading ? 'Sending Instructions...' : 'Send Reset Instructions'}
@@ -216,7 +216,7 @@ export default function ResetPassword() {
                   variant="primary"
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 h-10 sm:h-12 rounded-lg text-sm sm:text-base"
+                  className="flex-1 h-9 sm:h-10 rounded-full text-sm sm:text-base" // Changed h-10 sm:h-12 to h-9 sm:h-10
                   style={{ fontFamily: "'Afacad', sans-serif" }}
                 >
                   Resend Email
@@ -225,7 +225,7 @@ export default function ResetPassword() {
                   variant="primary"
                   type="button"
                   onClick={() => router.push('/auth/login')}
-                  className="flex-1 h-10 sm:h-12 rounded-lg text-sm sm:text-base"
+                  className="flex-1 h-9 sm:h-10 rounded-full text-sm sm:text-base" // Changed h-10 sm:h-12 to h-9 sm:h-10
                   style={{ fontFamily: "'Afacad', sans-serif" }}
                 >
                   Back to Sign In

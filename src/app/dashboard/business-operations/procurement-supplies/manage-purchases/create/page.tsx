@@ -49,7 +49,6 @@ const CreatePurchasePage = () => {
     supplier: '',
     purchaseDate: new Date().toISOString().split('T')[0],
     referenceNumber: '',
-    warehouse: '',
     expectedDeliveryDate: ''
   });
 
@@ -85,13 +84,15 @@ const CreatePurchasePage = () => {
     orderTax: 0
   });
 
-  // Warehouse options
+  // Warehouse options removed as warehouse input is no longer used
+  /*
   const warehouseOptions = [
     { value: '', label: 'Select warehouse' },
     { value: 'warehouse1', label: 'Main Warehouse' },
     { value: 'warehouse2', label: 'Regional Warehouse' },
     { value: 'warehouse3', label: 'Distribution Center' }
   ];
+  */
 
   // Supplier options
   const supplierOptions = [
@@ -301,21 +302,7 @@ const CreatePurchasePage = () => {
                       />
                     </div>
                     
-                    <div className="flex flex-col">
-                      <AutoCompleteSelect
-                        label="Warehouse"
-                        name="warehouse"
-                        value={purchaseData.warehouse}
-                        onChange={(value) => handleAutoCompleteChange('warehouse', value)}
-                        options={warehouseOptions}
-                        placeholder="Select Warehouse"
-                        swapActionButtonPosition={true}
-                        actionButton={{
-                          icon: <PlusOutlined className="text-gray-500" />,
-                          onClick: () => console.log('Add new warehouse')
-                        }}
-                      />
-                    </div>
+                    {/* Warehouse input removed as requested */}
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

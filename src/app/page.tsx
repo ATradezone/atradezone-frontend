@@ -10,7 +10,7 @@ const NotFoundPage = () => {
       {/* Global styles for background and custom scrollbar */}
       <style jsx global>{`
         html, body {
-          background-color: #e8efff;
+          background-color: #f9fafd;
           margin: 0;
           padding: 0;
         }
@@ -19,19 +19,19 @@ const NotFoundPage = () => {
           height: 8px;
         }
         ::-webkit-scrollbar-track {
-          background: #e8efff;
+          background: #f9fafd;
         }
         ::-webkit-scrollbar-thumb {
-          background-color: #c7d2fe;
+          background-color: #d1d5db;
           border-radius: 4px;
-          border: 2px solid #e8efff;
+          border: 2px solid #f9fafd;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background-color: #a5b4fc;
+          background-color: #9ca3af;
         }
         /* Firefox support for root */
         html {
-          scrollbar-color: #c7d2fe #e8efff;
+          scrollbar-color: #d1d5db #f9fafd;
           scrollbar-width: thin;
         }
 
@@ -40,29 +40,29 @@ const NotFoundPage = () => {
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #e8efff;
+          background: #f9fafd;
           border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #c7d2fe;
+          background-color: #d1d5db;
           border-radius: 4px;
-          border: 2px solid #e8efff;
+          border: 2px solid #f9fafd;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: #a5b4fc;
+          background-color: #9ca3af;
         }
         /* Firefox support for custom scrollbars */
         .custom-scrollbar {
-          scrollbar-color: #c7d2fe #e8efff;
+          scrollbar-color: #d1d5db #f9fafd;
           scrollbar-width: thin;
         }
       `}</style>
 
-      <div className="min-h-screen bg-[#e8efff] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#f9fafd] flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-8 text-center">
+          <div className="bg-gradient-to-r from-[#01363C] to-[#024a52] p-8 text-center">
             <h1 className="text-6xl font-bold text-white mb-2">404</h1>
-            <p className="text-xl text-blue-100">Page Not Found</p>
+            <p className="text-xl text-[#c8e6c9]">Page Not Found</p>
           </div>
           
           <div className="p-8 text-center">
@@ -79,13 +79,13 @@ const NotFoundPage = () => {
             
             <div className="space-y-4">
               <Link href="/auth/login" passHref>
-                <Button variant="primary" className="w-full py-3 mb-4">
+                <Button variant="primary" className="w-full py-3 mb-4 bg-[#c8e6c9] hover:bg-[#a5d6a7] text-gray-800">
                   Login to Your Account
                 </Button>
               </Link>
               
               <Link href="/auth/register" passHref>
-                <Button variant="secondary" className="w-full py-3">
+                <Button variant="secondary" className="w-full py-3 bg-white border border-[#01363C] text-[#01363C] hover:bg-[#f0f7f0]">
                   Create New Account
                 </Button>
               </Link>
@@ -95,13 +95,14 @@ const NotFoundPage = () => {
           <div className="bg-gray-50 px-8 py-6 text-center">
             <button 
               onClick={() => window.open('https://www.atradezone.ca/', '_blank', 'noopener,noreferrer')}
-              className="text-indigo-600 hover:text-indigo-800 font-medium mr-4 cursor-pointer bg-transparent border-none"
+              className="text-[#01363C] hover:text-[#024a52] font-medium mr-4 cursor-pointer bg-transparent border-none"
             >
               Back to Home
             </button>
+            <div className="inline-block h-4 w-px bg-[#01363C] mx-2 align-middle"></div>
             <button 
               onClick={() => window.open('https://www.atradezone.ca/offices/', '_blank', 'noopener,noreferrer')}
-              className="text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer bg-transparent border-none"
+              className="text-[#01363C] hover:text-[#024a52] font-medium cursor-pointer bg-transparent border-none"
             >
               Get Support
             </button>

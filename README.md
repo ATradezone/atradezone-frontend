@@ -253,6 +253,8 @@ Sales Invoice & Reports
 
 
 
+
+Switch Brance: Must be visible
 Remove Retail and Supplier
 
 Let if user select Pharmacy

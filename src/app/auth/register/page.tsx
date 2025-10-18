@@ -11,8 +11,6 @@ import AuthFormSkeleton from '../components/AuthFormSkeleton';
 import { Validation } from '@/components/shared';
 import AutoCompleteSelect from '@/components/ui/AutoCompleteSelect';
 import Input from '@/components/ui/Input';
-import countries from '@/data/countries.json';
-
 
 export default function Register() {
   const [form] = Form.useForm();
@@ -130,9 +128,10 @@ export default function Register() {
               name="register"
               onFinish={onFinish}
               layout="vertical"
-              className="space-y-4"
+              className="space-y-3" 
             >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Changed to single column layout for full width fields */}
+            <div className="grid grid-cols-1 gap-1"> 
               <Form.Item
                 name="fullName"
                 label={<span className="text-gray-700 font-semibold text-sm sm:text-base" style={{ fontFamily: "'Afacad', sans-serif" }}>Business Name</span>}
@@ -140,6 +139,7 @@ export default function Register() {
                   { required: true, message: 'Enter legal business name' },
                   { min: 2, message: 'Name must be at least 2 characters' },
                 ]}
+                className="!mb-1" // Reduced bottom margin
               >
                 <Input 
                   prefix={<UserOutlined className="text-gray-400 text-sm sm:text-base" style={{ fontSize: '14px' }} />}
@@ -148,7 +148,9 @@ export default function Register() {
                    
                 />
               </Form.Item>
+            </div>
 
+            <div className="grid grid-cols-2 gap-9"> {/* Two-column layout for Email and Phone */}
               <Form.Item
                 name="email"
                 label={<span className="text-gray-700 font-semibold text-sm sm:text-base" style={{ fontFamily: "'Afacad', sans-serif" }}>Email Address</span>}
@@ -156,6 +158,7 @@ export default function Register() {
                   { required: true, message: 'Please enter your email' },
                   { type: 'email', message: 'Please enter a valid email' },
                 ]}
+                className="!mb-1" // Reduced bottom margin
               >
                 <Input 
                   prefix={<MailOutlined className="text-gray-400 text-sm sm:text-base" style={{ fontSize: '14px' }} />}
@@ -164,47 +167,25 @@ export default function Register() {
                    
                 />
               </Form.Item>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Form.Item
-                name="country"
-                label={<span className="text-gray-700 font-semibold text-sm sm:text-base" style={{ fontFamily: "'Afacad', sans-serif" }}>Country</span>}
-                rules={[{ required: true, message: 'Please select your country' }]}
-              >
-                <AutoCompleteSelect
-                  prefix={<GlobalOutlined className="text-gray-400 text-sm sm:text-base" style={{ fontSize: '14px' }} />}
-                  placeholder="Select your country"
-                  options={countries}
-                  className="h-9 sm:h-10 rounded-lg text-sm sm:text-base w-full"
-                  style={{ 
-                    border: '1px solid #d9d9d9',
-                    borderRadius: '8px',
-                    paddingLeft: '36px',
-                    paddingTop: '3px',
-                    paddingBottom: '3px',
-                    fontFamily: "'Afacad', sans-serif"
-                  }}
-                />
-              </Form.Item>
 
               <Form.Item
                 name="phoneNumber"
                 label={<span className="text-gray-700 font-semibold text-sm sm:text-base" style={{ fontFamily: "'Afacad', sans-serif" }}>Phone Number</span>}
                 rules={[
-                  { required: true, message: 'Please enter your phone number' },
+                  { required: true, message: 'Please enter phone number' },
                 ]}
+                className="!mb-1" 
               >
                 <Input 
                   prefix={<PhoneOutlined className="text-gray-400 text-sm sm:text-base" style={{ fontSize: '14px' }} />}
-                  placeholder="Enter your phone number"
+                  placeholder="Enter  phone number"
                   className="h-9 sm:h-10 rounded-lg text-sm sm:text-base w-full"
                   
                 />
               </Form.Item>
             </div>
             
-            <div className="flex gap-4">
+            <div className="flex gap-9"> 
               <Form.Item
                 name="password"
                 label={<span className="text-gray-700 font-semibold text-sm sm:text-base" style={{ fontFamily: "'Afacad', sans-serif" }}>Your Password</span>}
@@ -212,7 +193,7 @@ export default function Register() {
                   { required: true, message: 'Type your password' },
                   { min: 8, message: 'Password must be at least 8 characters' },
                 ]}
-                className="flex-1"
+                className="flex-1 !mb-0"
               >
                 <Input
                   type="password"
@@ -238,19 +219,19 @@ export default function Register() {
                     },
                   }),
                 ]}
-                className="flex-1"
+                className="flex-1 !mb-0" 
               >
                 <Input
                   type="password"
                   prefix={<LockOutlined className="text-gray-400 text-sm sm:text-base" style={{ fontSize: '14px' }} />}
-                  placeholder="Confirm your password"
+                  placeholder="Confirm password"
                   className="h-9 sm:h-10 rounded-lg text-sm sm:text-base w-full"
                    
                 />
               </Form.Item>
             </div>
             
-            <div className="mb-4 sm:mb-6">
+            <div className="mb-6 sm:mb-8">
               <Form.Item 
                 name="agreement" 
                 valuePropName="checked" 
@@ -284,11 +265,11 @@ export default function Register() {
               </Form.Item>
             </div>
             
-            <Form.Item>
+            <Form.Item className="!mb-0 mt-4">
               <Button
                 variant="primary"
                 type="submit"
-                className="w-full h-9 sm:h-10 rounded-lg text-sm sm:text-base"
+                className="w-full h-9 sm:h-10 rounded-full text-sm sm:text-base"
                 style={{ fontFamily: "'Afacad', sans-serif" }}
               >
                 {loading ? 'Creating Account...' : 'Create Account'}

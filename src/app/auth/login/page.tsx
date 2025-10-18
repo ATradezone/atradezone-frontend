@@ -174,7 +174,7 @@ const LoginPage: React.FC = () => {
               <Button
                 variant="primary"
                 type="submit"
-                className="w-full h-9 sm:h-10 rounded-lg text-sm sm:text-base"
+                className="w-full h-9 sm:h-10 rounded-full text-sm sm:text-base"
                 style={{ fontFamily: "'Afacad', sans-serif" }}
               >
                 {loading ? 'Signing in...' : 'Sign in'}

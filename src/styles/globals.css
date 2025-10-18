@@ -141,7 +141,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgb(249 250 251);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -155,7 +155,7 @@ body {
 
 /* Firefox scrollbar styling */
 * {
-  scrollbar-color: #E9EEF6 transparent;
+  scrollbar-color: #E9EEF6 rgb(249 250 251);
   scrollbar-width: thin;
 }
 
