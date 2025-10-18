@@ -1,0 +1,483 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { Breadcrumb, Search, GenericTable, ActionButtons } from '@/components/reusable';
+import { PlusOutlined, SearchOutlined, FilterOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
+import FilterPanel from '@/components/reusable/FilterPanel';
+import StatCard from '@/components/ui/StatCard';
+import Button from '@/components/ui/Button';
+
+interface Order {
+  id: number;
+  orderNumber: string;
+  customer: string;
+  date: string;
+  total: string;
+  status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+}
+
+const OrderManagementPage = () => {
+  const [orders, setOrders] = useState<Order[]>([
+    { id: 1, orderNumber: '#ORD-001', customer: 'ABC Pharmacy', date: '2023-06-15', total: 'RWF 12,500', status: 'Delivered' },
+    { id: 2, orderNumber: '#ORD-002', customer: 'XYZ Medical Center', date: '2023-06-16', total: 'RWF 8,200', status: 'Processing' },
+    { id: 3, orderNumber: '#ORD-003', customer: 'Global Health Clinic', date: '2023-06-17', total: 'RWF 15,750', status: 'Shipped' },
+    { id: 4, orderNumber: '#ORD-004', customer: 'MediCare Hospital', date: '2023-06-18', total: 'RWF 22,300', status: 'Pending' },
+  ]);
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const itemsPerPage = 6;
+
+  const breadcrumbItems = [
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Product Management', href: '/dashboard/product-management' },
+    { name: 'Order Management', current: true }
+  ];
+
+  // Simulate loading data
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleSearch = (query: string) => {
+    setSearchTerm(query);
+  };
+
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    orderNumber: '',
+    customer: '',
+    status: '',
+    dateFrom: '',
+    dateTo: ''
+  });
+
+  const handleFilterChange = (key: keyof typeof filters, value: string) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleApplyFilters = () => {
+    setIsFilterPanelOpen(false);
+    // The filters are automatically applied through the filteredAndSortedOrders computation
+    console.log('Applied filters:', filters);
+  };
+
+  const handleClearAllFilters = () => {
+    setFilters({
+      orderNumber: '',
+      customer: '',
+      status: '',
+      dateFrom: '',
+      dateTo: ''
+    });
+    console.log('Cleared all filters');
+  };
+
+  // Define filter fields for the FilterPanel
+  const filterFields = [
+    { key: 'orderNumber', label: 'Order Number', type: 'text' as const, placeholder: 'Filter by order number' },
+    { key: 'customer', label: 'Customer', type: 'text' as const, placeholder: 'Filter by customer' },
+    { 
+      key: 'status', 
+      label: 'Status', 
+      type: 'select' as const,
+      options: [
+        { value: '', label: 'All Statuses' },
+        { value: 'pending', label: 'Pending' },
+        { value: 'processing', label: 'Processing' },
+        { value: 'shipped', label: 'Shipped' },
+        { value: 'delivered', label: 'Delivered' },
+        { value: 'cancelled', label: 'Cancelled' }
+      ]
+    },
+    { key: 'dateFrom', label: 'Date From', type: 'date' as const },
+    { key: 'dateTo', label: 'Date To', type: 'date' as const }
+  ];
+
+  // Filter and sort orders based on search, status, and sorting config
+  const filteredAndSortedOrders = orders.filter(order => {
+    const matchesSearch = order.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          order.customer.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesStatus = filterStatus === 'all' || order.status.toLowerCase().includes(filterStatus);
+    
+    // Apply dynamic filters
+    const matchesOrderNumber = !filters.orderNumber || order.orderNumber.toLowerCase().includes(filters.orderNumber.toLowerCase());
+    const matchesCustomer = !filters.customer || order.customer.toLowerCase().includes(filters.customer.toLowerCase());
+    const matchesFilterStatus = !filters.status || order.status.toLowerCase() === filters.status.toLowerCase();
+    
+    return matchesSearch && matchesStatus && matchesOrderNumber && matchesCustomer && matchesFilterStatus;
+  }).sort((a, b) => {
+    if (!sortConfig) return 0;
+    
+    let aValue, bValue;
+    
+    switch (sortConfig.key) {
+      case 'orderNumber':
+        aValue = a.orderNumber.toLowerCase();
+        bValue = b.orderNumber.toLowerCase();
+        break;
+      case 'customer':
+        aValue = a.customer.toLowerCase();
+        bValue = b.customer.toLowerCase();
+        break;
+      case 'date':
+        aValue = new Date(a.date).getTime();
+        bValue = new Date(b.date).getTime();
+        break;
+      case 'total':
+        aValue = parseFloat(a.total.replace('RWF ', '').replace(',', ''));
+        bValue = parseFloat(b.total.replace('RWF ', '').replace(',', ''));
+        break;
+      case 'status':
+        aValue = a.status.toLowerCase();
+        bValue = b.status.toLowerCase();
+        break;
+      default:
+        return 0;
+    }
+    
+    if (aValue < bValue) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredAndSortedOrders.length / itemsPerPage);
+  const currentOrders = filteredAndSortedOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Handle pagination
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleSort = (key: string) => {
+    setSortConfig(prevConfig => ({
+      key,
+      direction: prevConfig?.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  };
+
+  // Stats data
+  const stats = [
+    { title: "Total Orders", value: orders.length, icon: <SearchOutlined className="w-5 h-5 text-[#2463EB]" />, color: "bg-[#F6F9FF] border border-[#DBE9FE]" },
+    { title: "Pending Orders", value: orders.filter(o => o.status === 'Pending').length, icon: <SearchOutlined className="w-5 h-5 text-yellow-500" />, color: "bg-yellow-50" },
+    { title: "Processing", value: orders.filter(o => o.status === 'Processing').length, icon: <SearchOutlined className="w-5 h-5 text-blue-500" />, color: "bg-blue-50" },
+    { title: "Completed", value: orders.filter(o => o.status === 'Delivered').length, icon: <SearchOutlined className="w-5 h-5 text-green-500" />, color: "bg-green-50" }
+  ];
+
+  // Show skeleton while loading
+  if (loading) {
+    return (
+      <div className="p-6 bg-gray-50 min-h-screen">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center mb-2">
+          <div>
+            <div className="h-8 bg-gray-300 rounded w-24 mb-2 animate-pulse"></div>
+            <div className="flex items-center mt-2">
+              <div className="h-4 bg-gray-300 rounded w-20 animate-pulse"></div>
+              <div className="mx-2 h-4 bg-gray-300 rounded w-2 animate-pulse"></div>
+              <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+            </div>
+          </div>
+          
+          {/* Add New Order Icon Skeleton */}
+          <div className="h-8 w-8 bg-gray-300 rounded-[0.45rem] animate-pulse"></div>
+        </div>
+
+        {/* Divider Line */}
+        <div className="h-px bg-[#DDDDDD] mb-0 mx-1"></div>
+        
+        {/* Search Bar and Stats Boxes Container */}
+        <div className="border-t border-[#dddddd] pt-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            {/* Search Bar Skeleton */}
+            <div className="relative mb-6 mr-0">
+              <div className="flex items-center px-4 py-3 bg-gray-200 rounded-lg animate-pulse">
+                <div className="h-5 w-5 bg-gray-300 rounded-full mr-2"></div>
+                <div className="h-4 flex-1 bg-gray-300 rounded"></div>
+                <div className="h-5 w-5 bg-gray-300 rounded-full ml-2"></div>
+              </div>
+            </div>
+            
+            {/* Divider Line */}
+            <div className="h-px bg-[#F2F2F2] mb-6 -mx-6"></div>
+            
+            {/* Stats Boxes Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((item) => (
+                <div key={item} className="p-4 rounded-xl bg-white border border-gray-200 shadow-[-5px_5px_16px_6px_rgba(244,245,247,1)] animate-pulse">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-[#F6F9FF] border border-[#DBE9FE]">
+                      <div className="h-5 w-5 bg-gray-300 rounded"></div>
+                    </div>
+                    <div>
+                      <div className="h-4 bg-gray-300 rounded w-24 mb-2"></div>
+                      <div className="h-6 bg-gray-300 rounded w-16"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Orders Table Skeleton */}
+        <div className="bg-white rounded-xl overflow-hidden" style={{ borderRadius: '20px 20px 0px 0px' }}>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {Array.from({ length: 6 }, (_, index) => (
+                  <tr key={index} className="animate-pulse">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="h-4 bg-gray-300 rounded w-24"></div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 bg-gray-300 rounded-full"></div>
+                        <div className="h-6 bg-gray-300 rounded-full w-32"></div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 bg-gray-300 rounded-full"></div>
+                        <div className="h-6 bg-gray-300 rounded-full w-24"></div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="h-6 bg-gray-300 rounded-full w-20"></div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-4 bg-gray-300 rounded w-8"></div>
+                        <div className="h-4 bg-gray-300 rounded w-8"></div>
+                        <div className="h-4 bg-gray-300 rounded w-12"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Skeleton */}
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50">
+            <div className="h-4 bg-gray-300 rounded w-48 animate-pulse"></div>
+            <div className="flex items-center space-x-4">
+              <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+              <div className="h-4 bg-gray-300 rounded w-24 animate-pulse"></div>
+              <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const columns = [
+    {
+      key: 'orderNumber',
+      title: 'ORDER #',
+      sortable: true,
+      render: (value: string, record: Order) => (
+        <a href={`/dashboard/product-management/order-management/tracking?orderId=${record.id}`} className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+          {value}
+        </a>
+      )
+    },
+    {
+      key: 'customer',
+      title: 'CUSTOMER',
+      sortable: true,
+      render: (value: string) => (
+        <div className="text-sm text-gray-900">{value}</div>
+      )
+    },
+    {
+      key: 'date',
+      title: 'DATE',
+      sortable: true,
+      render: (value: string) => (
+        <div className="text-sm text-gray-900">{value}</div>
+      )
+    },
+    {
+      key: 'total',
+      title: 'TOTAL',
+      sortable: true,
+      render: (value: string) => (
+        <div className="text-sm font-medium text-gray-900">{value}</div>
+      )
+    },
+    {
+      key: 'status',
+      title: 'STATUS',
+      sortable: true,
+      render: (value: string) => (
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+          value === 'Pending' 
+            ? 'bg-yellow-100 text-yellow-800' 
+            : value === 'Processing'
+            ? 'bg-blue-100 text-blue-800'
+            : value === 'Shipped'
+            ? 'bg-purple-100 text-purple-800'
+            : value === 'Delivered'
+            ? 'bg-green-100 text-green-800'
+            : 'bg-red-100 text-red-800'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      title: 'ACTION',
+      render: (_: any, record: Order) => (
+        <ActionButtons 
+          onView={() => console.log('View order', record.id)}
+          onEdit={() => console.log('Edit order', record.id)}
+          onDelete={() => console.log('Delete order', record.id)}
+        />
+      )
+    }
+  ];
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-2">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Order Management</h1>
+          <div className="mt-2">
+            <Breadcrumb items={breadcrumbItems} />
+          </div>
+        </div>
+        
+        {/* Add New Order Button */}
+        <Button
+          variant="primary"
+          size="md"
+          onClick={() => console.log('Add new order')}
+          className="flex items-center"
+        >
+          <PlusOutlined className="mr-2" />
+          Add New Order
+        </Button>
+      </div>
+
+      {/* Divider Line */}
+      <div className="h-px bg-[#DDDDDD] mb-0 mx-1"></div>
+      
+      {/* Search Bar and Stats Boxes Container */}
+      <div className="border-t border-[#dddddd] pt-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          {/* Search Bar */}
+          <div className="relative mb-6 mr-0" style={{marginRight: '2.7rem' }}>
+            <SearchOutlined 
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" 
+              style={{ color: '#b7b7b7' }}
+            />
+            <input
+              type="text"
+              placeholder="Search or filter orders"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ border: '1px solid #E5E7EB', backgroundColor: '#f8fafd', borderRadius: '0.5rem' }}
+            />
+            
+            <FilterOutlined 
+              className="absolute right-[-1.7rem] top-1/2 transform -translate-y-1/2 w-5 h-5 cursor-pointer"
+              style={{ color: '#b7b7b7' }}
+              onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+            />
+          </div>
+          
+          {/* Filter Panel - Collapsible */}
+          {isFilterPanelOpen && (
+            <FilterPanel
+              fields={filterFields}
+              onApply={handleApplyFilters}
+              onClear={handleClearAllFilters}
+              onClose={() => setIsFilterPanelOpen(false)}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+            />
+          )}
+          
+          {/* Divider Line */}
+          <div className="h-px bg-[#F2F2F2] mb-6 -mx-6"></div>
+          
+          {/* Stats Boxes */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {stats.map((stat, index) => (
+              <StatCard
+                key={index}
+                title={stat.title}
+                value={stat.value}
+                icon={stat.icon}
+                color={stat.color}
+                className="p-4"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Orders Table */}
+      <GenericTable
+        data={currentOrders}
+        columns={columns}
+        loading={loading}
+        onSort={handleSort}
+        sortConfig={sortConfig}
+        pagination={{
+          currentPage,
+          totalPages,
+          onPageChange: goToPage,
+          itemsPerPage,
+          totalItems: filteredAndSortedOrders.length
+        }}
+      />
+    </div>
+  );
+};
+
+export default OrderManagementPage;

@@ -1,0 +1,182 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Storybook build outputs
+.out
+.storybook-out
+storybook-static
+
+# Temporary folders
+tmp/
+temp/
+
+# Additional cache files and directories
+.cache/
+.parcel-cache/
+webpack-stats.json
+*.cache
+.cache-loader/
+.cache-webpack/
+.cache-babel-loader/
+.cache-storybook/
+# React cache
+.react-cache/
+# Next.js cache
+.next/cache/
+# Yarn cache
+.yarn/cache/
+# Package manager cache
+.pnpm-store/
+# TypeScript cache
+.tscache/
+# Babel cache
+.babel-cache/
+# Jest cache
+.jest-cache/
+# Cypress cache
+.cypress-cache/
+# Gatsby cache
+.gatsby-cache/
+.cache/typescript/
+# Lock files for different package managers
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+# Build artifacts
+dist/
+build/
+# Dependency directories
+jspm_packages/
+# Serverless directories
+.serverless/
+# FuseBox cache
+.fusebox/
+# TernJS
+.tern-port
+# Node.js coverage
+.nyc_output/
+# Grunt coverage
+.coverage/
+# Sass cache
+.sass-cache/
+# Composer
+vendor/
+# Meteor
+.meteor/
+# Ember
+bower_components/
+# Vue
+.nuxt/
+# Angular
+.angular/
+# Svelte
+.svelte-kit/
+# Rollup
+.rollup.cache/
+# Vite
+.vite/
+# Cache directories for various tools
+.cache/prettier/
+.cache/eslint/
+.cache/stylelint/
+# IDE specific files
+*.iml
+*.ipr
+*.iws
+*.orig
+# Mac specific files
+*.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+# Windows specific files
+Desktop.ini
+Thumbs.db
+ehthumbs.db
+
+# Documentation files to exclude from Git
+DOCUMENTATION_TITLE_SYSTEM.md
+COMPONENT_STRUCTURE.md
+FIGMA_TO_CODE_GUIDE.md
+src/DOCUMENTATION_TITLE_SYSTEM.md
+docs/
+src/docs/
+src/docs/layout-pattern-guide.md
+
+>>>>>>> REPLACE

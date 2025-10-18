@@ -1,0 +1,193 @@
+/* Tailwind CSS directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .font-afacad {
+    font-family: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+}
+
+/* Ensure Afacad font is used for all form elements in auth pages */
+.auth-form * {
+  font-family: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Custom border-gray-300 style */
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border: solid 1px #eaecf0;
+}
+
+/* Custom styles for Login Page */
+.ant-form-item-label > label {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.ant-input {
+  border-radius: 0.5rem;
+  height: 2rem;
+}
+
+.ant-input-affix-wrapper {
+  border-radius: 0.5rem;
+  height: 3rem;
+}
+
+.ant-btn {
+  background-color: white !important;
+  border: 1px solid #e9eef6 !important;
+  border-radius: 5px !important;
+  color: inherit !important;
+}
+.ant-btn:hover{
+  background-color: white !important;
+  border-color: #e9eef6 !important;
+}
+
+/* Custom primary button with new color */
+.btn-primary {
+  background-color: #85ed68;
+  border-color: #85ed68;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #74e057;
+  border-color: #74e057;
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 3px rgba(133, 237, 104, 0.25);
+}
+
+/* Custom button with specific background and text colors */
+.btn-custom-green {
+  background-color: rgb(235, 253, 229);
+  color: rgb(133, 237, 104);
+  font-weight: bold;
+}
+
+.btn-custom-green:hover {
+  background-color: rgb(225, 249, 215);
+}
+
+.btn-custom-green:focus {
+  box-shadow: 0 0 0 3px rgba(133, 237, 104, 0.25);
+}
+
+/* Custom button with inverted color scheme */
+.btn-inverted-green {
+  background-color: rgb(254, 254, 254);
+  color: rgb(8, 14, 26);
+  font-weight: bold;
+  border: solid 1px rgb(8, 13, 26);
+  font-family: 'Afacad', sans-serif;
+}
+
+.btn-inverted-green:hover {
+  background-color: rgb(240, 240, 254);
+  border-color: rgb(8, 13, 26);
+}
+
+.btn-inverted-green:focus {
+  box-shadow: 0 0 0 3px rgba(8, 13, 26, 0.25);
+}
+
+/* Custom text size for heading */
+.text-4xl {
+  font-size: 6.25rem;
+}
+
+/* Custom text size for footer */
+.text-xs {
+  font-size: 0.95rem;
+}
+
+/* Remove default margin from form items */
+.ant-form-item {
+  margin-bottom: 1.5rem;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E9EEF6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8a9bd1;
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-color: #E9EEF6 transparent;
+  scrollbar-width: thin;
+}
+
+/* Override Tailwind's bg-green-500 to use rgb(235, 253, 229) */
+.bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(235 253 229);
+}
+
+/* Override Tailwind's text-white to use rgb(133 237 104) with border */
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255);
+  border: none;
+}
+
+/* Custom Ant Design Tour mask background color - using multiple approaches to ensure 15% transparency on all steps */
+.ant-tour-mask,
+div.ant-tour-mask,
+[class*="ant-tour"] [class*="mask"],
+div[class*="ant-tour-mask"] {
+  background-color: rgba(1, 54, 60, 0.15) !important;
+}
+
+/* More specific selectors to override any default Ant Design styles */
+.css-dev-only-do-not-override-* .ant-tour-mask,
+[class*="css-dev-only-do-not-override"] .ant-tour-mask,
+div.ant-tour div.ant-tour-mask {
+  background-color: rgba(1, 54, 60, 0.15) !important;
+}
+
+/* Fallback for any mask element */
+[class*="mask"] {
+  background-color: rgba(1, 54, 60, 0.15) !important;
+}

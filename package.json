@@ -1,0 +1,42 @@
+{
+  "name": "atradezone-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "verify-layout": "node src/scripts/verify-layout-pattern.js"
+  },
+  "dependencies": {
+    "@ant-design/charts": "^2.6.5",
+    "@ant-design/icons": "^5.6.1",
+    "@ant-design/nextjs-registry": "^1.0.1",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@types/react-calendar": "^3.9.0",
+    "@yusifaliyevpro/countries": "^2.2.2",
+    "antd": "^5.27.4",
+    "dayjs": "^1.11.18",
+    "jsbarcode": "^3.12.1",
+    "libphonenumber-js": "^1.12.24",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.4",
+    "react": "18.2.0",
+    "react-calendar": "^4.0.0",
+    "react-dom": "18.2.0",
+    "react-phone-number-input": "^3.4.12",
+    "recharts": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18.3.25",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "15.5.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
