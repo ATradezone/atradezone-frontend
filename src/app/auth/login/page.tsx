@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
         {/* Left Side - Branding & Sign Up CTA */}
         <AuthBranding />
         {/* Right Side - Clean Login Form */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-20 bg-white min-h-screen lg:min-h-0">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-20 bg-white min-h-screen lg:min-h-screen">
           <div className="w-full max-w-md mx-auto">
             {/* Mobile Logo */}
             <div className="md:hidden text-center mb-6 sm:mb-8">
@@ -97,7 +97,7 @@ const LoginPage: React.FC = () => {
       {/* Left Side - Branding & Sign Up CTA */}
       <AuthBranding />
       {/* Right Side - Clean Login Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-20 bg-white min-h-screen lg:min-h-0">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-6 md:px-8 lg:px-20 bg-white min-h-screen lg:min-h-screen">
         <div className="w-full max-w-md mx-auto">
           {/* Mobile Logo */}
           <div className="md:hidden text-center mb-6 sm:mb-8">

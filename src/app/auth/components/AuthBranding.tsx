@@ -2,21 +2,25 @@
 
 const AuthBranding = () => {
   return (
-    <div className="hidden md:flex md:w-full lg:w-1/2 md:h-48 lg:h-auto flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-28 text-white relative overflow-hidden">
+    <div className="hidden md:flex md:w-full lg:w-1/2 md:h-48 lg:h-auto flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-28 text-white relative overflow-hidden mt-8" style={{ marginTop: '2rem' }}>
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat min-h-screen"
         style={{
-          ///backgroundImage: 'url(/images/auth-bg.png)',
-          backgroundColor: '#000000',
+          backgroundImage: 'url(/images/auth-bg.png)',
+          minHeight: '100vh',
+          //backgroundColor: '#000000',
         }}
       ></div>
       
+   
+      
       {/* Background overlay image */}
       <div 
-        className="absolute inset-0 bg-no-repeat bg-cover bg-center opacity-30"
+        className="absolute inset-0 bg-no-repeat bg-cover bg-center opacity-30 min-h-screen"
         style={{
-          backgroundImage: 'url(/images/background-image-with-line-scaled.png)'
+          backgroundImage: 'url(/images/background-image-with-line-scaled.png)',
+          minHeight: '100vh'
         }}
       ></div>
       
