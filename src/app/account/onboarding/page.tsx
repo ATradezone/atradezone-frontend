@@ -322,9 +322,9 @@ export default function Onboarding() {
             {showSubOptionsOverlay && (
               <div className="absolute inset-0 bg-white rounded-lg p-4 flex flex-col z-10">
                 <StatCard className="flex-grow flex flex-col h-full">
-                  <div className="flex justify-between items-center mb-3">
+                  <div className="flex justify-between items-center mt-3">
                     <SectionHeader 
-                      title="Please specify your business type:"
+                      title="Please specify your business type"
                       className="text-lg font-bold"
                     />
                   </div>

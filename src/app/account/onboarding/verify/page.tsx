@@ -70,9 +70,23 @@ export default function VerifyAccount() {
             </div>
 
             <Alert
+              message="Important"
+              description={
+                <div className="text-left text-xs" style={{ fontFamily: "'Afacad', sans-serif" }}>
+                  <p className="font-semibold">Verification link expires in 24 hours.</p>
+                  <p>Please verify your account within this time period.</p>
+                </div>
+              }
+              type="warning"
+              showIcon
+              className="mb-4 text-left"
+              style={{ padding: '0.7rem' }}
+            />
+
+            <Alert
               message="Didn't receive the email?"
               description={
-                <div className="text-left text-xs sm:text-sm" style={{ fontFamily: "'Afacad', sans-serif" }}>
+                <div className="text-left text-xs" style={{ fontFamily: "'Afacad', sans-serif" }}>
                   <p>• Check your spam folder</p>
                   <p>• Make sure you entered the correct email address</p>
                   <p>• Wait a few minutes for the email to arrive</p>
@@ -80,7 +94,8 @@ export default function VerifyAccount() {
               }
               type="info"
               showIcon
-              className="mb-6 text-left"
+              className="mb-8 text-left"
+              style={{ padding: '0.7rem' }}
             />
 
             <div className="flex flex-col sm:flex-row gap-3 mt-5">
