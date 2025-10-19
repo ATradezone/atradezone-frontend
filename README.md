@@ -276,3 +276,9 @@ Onboarding
  Manage branches
  Get dashboard
  Access main menu based on business category being selected 
+
+
+git branch
+git pull origin main
+git push origin main
+git push origin main --force
