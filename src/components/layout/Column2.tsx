@@ -115,6 +115,12 @@ const Column2 = () => {
   // Determine active menu based on pathname
   const getActiveMenuId = (): string => {
     // More specific paths first
+    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/companies')) return 'companies';
+    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/subscriptions')) return 'subscriptions';
+    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/users')) return 'users';
+    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/modules')) return 'modules';
+    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/reports')) return 'reports';
+    if (pathname?.includes('/dashboard/super-admin')) return 'super-admin-dashboard';
     if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock') && pathname?.includes('/inventory')) return 'inventory';
     if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock') && pathname?.includes('/stock-count')) return 'stock-count';
     if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock') && pathname?.includes('/stock-transfer')) return 'stock-transfer';
@@ -392,6 +398,25 @@ const Column2 = () => {
       case 'profits-loss':
         router.push('/dashboard/analytics-reports/profits-loss');
         break;
+      // Super Admin routes
+      case 'super-admin-dashboard':
+        router.push('/dashboard/super-admin');
+        break;
+      case 'companies':
+        router.push('/dashboard/super-admin/companies');
+        break;
+      case 'subscriptions':
+        router.push('/dashboard/super-admin/subscriptions');
+        break;
+      case 'users':
+        router.push('/dashboard/super-admin/users');
+        break;
+      case 'modules':
+        router.push('/dashboard/super-admin/modules');
+        break;
+      case 'reports':
+        router.push('/dashboard/super-admin/reports');
+        break;
       default:
         console.log(`Navigate to page for ${id}`);
     }
@@ -611,6 +636,18 @@ const Column2 = () => {
             { id: "production-reports", label: "Production Reports", icon: <FileTextOutlined /> },
           ]
         },
+      ]
+    }
+    ,
+    {
+      title: "S U P E R   A D M I N",
+      items: [
+        { id: "super-admin-dashboard", label: "Dashboard", icon: <DashboardOutlined />, section: "super-admin" },
+        { id: "companies", label: "Companies", icon: <ShopOutlined />, section: "super-admin" },
+        { id: "subscriptions", label: "Subscriptions", icon: <FileTextOutlined />, section: "super-admin" },
+        { id: "users", label: "Users", icon: <UserOutlined />, section: "super-admin" },
+        { id: "modules", label: "Modules", icon: <AppstoreOutlined />, section: "super-admin" },
+        { id: "reports", label: "Reports", icon: <BarChartOutlined />, section: "super-admin" },
       ]
     }
   ];

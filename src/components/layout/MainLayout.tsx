@@ -68,6 +68,13 @@ const routeTitles: Record<string, string> = {
   '/dashboard/analytics-reports/profits-loss': 'Profits & Loss',
   '/dashboard/test-title': 'Test Dynamic Title',
   '/settings/company': 'Company Settings',
+  // Super Admin routes
+  '/dashboard/super-admin': 'Super Admin Dashboard',
+  '/dashboard/super-admin/companies': 'Companies',
+  '/dashboard/super-admin/subscriptions': 'Subscriptions',
+  '/dashboard/super-admin/users': 'Users',
+  '/dashboard/super-admin/modules': 'Modules',
+  '/dashboard/super-admin/reports': 'Reports',
 };
 
 const MainLayout = ({ children }: MainLayoutProps) => {
