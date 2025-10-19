@@ -6,6 +6,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-primary: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,7 +19,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-primary);
   margin: 0;
   padding: 0;
 }
@@ -29,13 +30,13 @@ body {
   }
   
   .font-afacad {
-    font-family: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: var(--font-primary);
   }
 }
 
 /* Ensure Afacad font is used for all form elements in auth pages */
 .auth-form * {
-  font-family: 'Afacad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-primary);
 }
 
 /* Custom border-gray-300 style */
@@ -108,7 +109,7 @@ body {
   color: rgb(8, 14, 26);
   font-weight: bold;
   border: solid 1px rgb(8, 13, 26);
-  font-family: 'Afacad', sans-serif;
+  font-family: var(--font-primary);
 }
 
 .btn-inverted-green:hover {
@@ -176,7 +177,7 @@ body {
 .ant-tour-mask,
 div.ant-tour-mask,
 [class*="ant-tour"] [class*="mask"],
-div[class*="ant-tour-mask"] {
+div.ant-tour div.ant-tour-mask {
   background-color: rgba(1, 54, 60, 0.15) !important;
 }
 
@@ -190,4 +191,21 @@ div.ant-tour div.ant-tour-mask {
 /* Fallback for any mask element */
 [class*="mask"] {
   background-color: rgba(1, 54, 60, 0.15) !important;
+}
+
+/* Ensure all Ant Design components inherit your font */
+.ant-menu,
+.ant-menu * {
+  font-family: var(--font-primary) !important;
+}
+
+/* Extend to other common AntD components if needed */
+.ant-btn,
+.ant-input,
+.ant-typography,
+.ant-layout,
+.ant-menu-item,
+.ant-menu-submenu-title,
+.ant-menu-item-group-title {
+  font-family: var(--font-primary) !important;
 }

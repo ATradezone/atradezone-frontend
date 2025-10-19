@@ -6,7 +6,6 @@ import {
   BarChartOutlined, 
   FileTextOutlined, 
   ControlOutlined,
-  RightOutlined,
   UserOutlined,
   ShoppingCartOutlined,
   ShopOutlined,
@@ -19,7 +18,6 @@ import {
   TransactionOutlined,
   ProfileOutlined,
   ContainerOutlined,
-  GiftOutlined,
   BankOutlined,
   ImportOutlined,
   ExportOutlined,
@@ -36,620 +34,305 @@ import {
   MenuOutlined,
   AppstoreOutlined,
   ShoppingOutlined,
-  FileProtectOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
-  FileWordOutlined,
-  FilePptOutlined,
-  FileUnknownOutlined,
-  FileImageOutlined,
-  FileZipOutlined,
-  FileMarkdownOutlined,
-  FileAddOutlined,
-  FileDoneOutlined,
-  FileSyncOutlined,
-  FileExclamationOutlined,
-  ExceptionOutlined,
-  FileSearchOutlined,
   BuildOutlined
 } from '@ant-design/icons';
+import { Menu } from 'antd';
+import type { MenuProps } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
-import { User2Icon } from 'lucide-react';
 
-interface SubMenuItem {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  subItems?: SubMenuItem[];
-}
+type MenuItem = Required<MenuProps>['items'][number];
 
-interface MenuItem {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  section: string;
-  subItems?: SubMenuItem[];
-}
+// Helper function to create menu items
+const getItem = (
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: 'group'
+): MenuItem => {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+};
 
 const Column2 = () => {
-  const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set(['business-operations']));
+  const [openKeys, setOpenKeys] = useState<string[]>(['business-operations']);
   const [isBillingHovered, setIsBillingHovered] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   
-  // Helper functions for menu expansion
-  const isMenuExpanded = (menuId: string): boolean => expandedMenus.has(menuId);
-  
-  const toggleMenu = (menuId: string) => {
-    setExpandedMenus(prev => {
-      const newSet = new Set(prev);
-      
-      // Check if the menu being toggled is a parent menu (has subItems)
-      const isParentMenu = menuSections.some(section => 
-        section.items.some(item => item.id === menuId && item.subItems)
-      );
-      
-      if (newSet.has(menuId)) {
-        // If the menu is already expanded, collapse it
-        newSet.delete(menuId);
-      } else {
-        // If the menu is collapsed
-        if (isParentMenu) {
-          // If it's a parent menu, close other parent menus but keep submenus open
-          menuSections.forEach(section => {
-            section.items.forEach(item => {
-              // Close other parent menus that have subItems
-              if (item.id !== menuId && item.subItems) {
-                newSet.delete(item.id);
-              }
-            });
-          });
-        }
-        // Expand the clicked menu
-        newSet.add(menuId);
-      }
-      return newSet;
-    });
+  // Navigation mapping
+  const navigationMap: Record<string, string> = {
+    'dashboard': '/dashboard',
+    'business-operations': '/dashboard/business-operations',
+    'point-of-sales': '/dashboard/point-of-sales',
+    'analytics-reports': '/dashboard/analytics-reports',
+    'pharmacy-management': '/dashboard/pharmacy-management',
+    'distribution-network': '/dashboard/distribution-network',
+    'supplier-profiles': '/dashboard/suppliers',
+    'manage-suppliers': '/dashboard/user-management/manage-suppliers',
+    'users-roles': '/dashboard/user-management/users-roles',
+    'manage-customers': '/dashboard/user-management/manage-customers',
+    'medicines-inventory': '/dashboard/inventory/medicines',
+    'patients-vouchers': '/dashboard/pharmacy-management/patients-vouchers',
+    'sales-invoice-reports': '/dashboard/pharmacy-management/sales-invoice-reports',
+    'product-catalogues': '/dashboard/distribution-network/product-catalogues',
+    'orders-management': '/dashboard/orders',
+    'customers-profiles': '/dashboard/customers/profiles',
+    'all-products': '/dashboard/product-management/all-products',
+    'order-management': '/dashboard/product-management/order-management',
+    'manage-categories': '/dashboard/product-management/manage-categories',
+    'products-variations': '/dashboard/product-management/products-variations',
+    'sales-management': '/dashboard/business-operations/sales-management',
+    'procurement-supplies': '/dashboard/business-operations/procurement-supplies',
+    'inventory-stock': '/dashboard/business-operations/inventory-stock',
+    'inventory': '/dashboard/business-operations/inventory-stock/inventory',
+    'stock-count': '/dashboard/business-operations/inventory-stock/stock-count',
+    'stock-transfer': '/dashboard/business-operations/inventory-stock/stock-transfer',
+    'financial-management': '/dashboard/business-operations/financial-management',
+    'manage-sales': '/dashboard/business-operations/sales-management/manage-sales',
+    'manage-quotation': '/dashboard/business-operations/sales-management/manage-quotation',
+    'manage-purchases': '/dashboard/business-operations/procurement-supplies/manage-purchases',
+    'manage-importations': '/dashboard/business-operations/procurement-supplies/manage-importations',
+    'income': '/dashboard/business-operations/financial-management/income',
+    'expenses': '/dashboard/business-operations/financial-management/expenses',
+    'production-planning': '/dashboard/manufacturing/production-planning',
+    'quality-control': '/dashboard/manufacturing/quality-control',
+    'inventory-management': '/dashboard/manufacturing/inventory-management',
+    'production-reports': '/dashboard/manufacturing/production-reports',
+    'pos-menu': '/pos-menu',
+    'pos-orders': '/dashboard/point-of-sales/pos-orders',
+    'print-barcodes': '/dashboard/point-of-sales/print-barcodes',
+    'transactions': '/dashboard/analytics-reports/transactions',
+    'income-summary': '/dashboard/analytics-reports/income-summary',
+    'expense-summary': '/dashboard/analytics-reports/expense-summary',
+    'invoice-summary': '/dashboard/analytics-reports/invoice-summary',
+    'purchase-report': '/dashboard/analytics-reports/purchase-report',
+    'sales-vs-purchase': '/dashboard/analytics-reports/sales-vs-purchase',
+    'tax-summary': '/dashboard/analytics-reports/tax-summary',
+    'profits-loss': '/dashboard/analytics-reports/profits-loss',
+    'super-admin-dashboard': '/dashboard/super-admin',
+    'companies': '/dashboard/super-admin/companies',
+    'subscriptions': '/dashboard/super-admin/subscriptions',
+    'users': '/dashboard/super-admin/users',
+    'modules': '/dashboard/super-admin/modules',
+    'reports': '/dashboard/super-admin/reports',
+    'distribution-analytics-reports': '/dashboard/distribution-network/analytics-reports',
   };
-  
+
+  // Path matching patterns for active menu detection
+  const pathPatterns: Array<{ pattern: string[], key: string }> = [
+    // Super Admin routes (more specific first)
+    { pattern: ['/dashboard/super-admin', '/companies'], key: 'companies' },
+    { pattern: ['/dashboard/super-admin', '/subscriptions'], key: 'subscriptions' },
+    { pattern: ['/dashboard/super-admin', '/users'], key: 'users' },
+    { pattern: ['/dashboard/super-admin', '/modules'], key: 'modules' },
+    { pattern: ['/dashboard/super-admin', '/reports'], key: 'reports' },
+    { pattern: ['/dashboard/super-admin'], key: 'super-admin-dashboard' },
+    
+    // Business Operations - Inventory & Stock
+    { pattern: ['/business-operations', '/inventory-stock', '/inventory'], key: 'inventory' },
+    { pattern: ['/business-operations', '/inventory-stock', '/stock-count'], key: 'stock-count' },
+    { pattern: ['/business-operations', '/inventory-stock', '/stock-transfer'], key: 'stock-transfer' },
+    { pattern: ['/business-operations', '/inventory-stock'], key: 'inventory-stock' },
+    
+    // Business Operations - Sales Management
+    { pattern: ['/business-operations', '/sales-management', '/manage-sales'], key: 'manage-sales' },
+    { pattern: ['/business-operations', '/sales-management', '/manage-quotation'], key: 'manage-quotation' },
+    { pattern: ['/business-operations', '/sales-management'], key: 'sales-management' },
+    
+    // Business Operations - Procurement & Supplies
+    { pattern: ['/business-operations', '/procurement-supplies', '/manage-purchases'], key: 'manage-purchases' },
+    { pattern: ['/business-operations', '/procurement-supplies', '/manage-importations'], key: 'manage-importations' },
+    { pattern: ['/business-operations', '/procurement-supplies'], key: 'procurement-supplies' },
+    
+    // Business Operations - Financial Management
+    { pattern: ['/business-operations', '/financial-management', '/income'], key: 'income' },
+    { pattern: ['/business-operations', '/financial-management', '/expenses'], key: 'expenses' },
+    { pattern: ['/business-operations', '/financial-management'], key: 'financial-management' },
+    
+    // Manufacturing
+    { pattern: ['/manufacturing', '/production-planning'], key: 'production-planning' },
+    { pattern: ['/manufacturing', '/quality-control'], key: 'quality-control' },
+    { pattern: ['/manufacturing', '/inventory-management'], key: 'inventory-management' },
+    { pattern: ['/manufacturing', '/production-reports'], key: 'production-reports' },
+    { pattern: ['/manufacturing'], key: 'manufacturing' },
+    
+    // Point of Sales
+    { pattern: ['/pos-menu'], key: 'pos-menu' },
+    { pattern: ['/point-of-sales', '/pos-orders'], key: 'pos-orders' },
+    { pattern: ['/point-of-sales', '/print-barcodes'], key: 'print-barcodes' },
+    
+    // Analytics & Reports
+    { pattern: ['/analytics-reports', '/transactions'], key: 'transactions' },
+    { pattern: ['/analytics-reports', '/income-summary'], key: 'income-summary' },
+    { pattern: ['/analytics-reports', '/expense-summary'], key: 'expense-summary' },
+    { pattern: ['/analytics-reports', '/invoice-summary'], key: 'invoice-summary' },
+    { pattern: ['/analytics-reports', '/purchase-report'], key: 'purchase-report' },
+    { pattern: ['/analytics-reports', '/sales-vs-purchase'], key: 'sales-vs-purchase' },
+    { pattern: ['/analytics-reports', '/tax-summary'], key: 'tax-summary' },
+    { pattern: ['/analytics-reports', '/profits-loss'], key: 'profits-loss' },
+    
+    // Distribution Network
+    { pattern: ['/distribution-network', '/product-catalogues'], key: 'product-catalogues' },
+    { pattern: ['/distribution-network', '/analytics-reports'], key: 'distribution-analytics-reports' },
+    
+    // Pharmacy Management
+    { pattern: ['/pharmacy-management', '/patients-vouchers'], key: 'patients-vouchers' },
+    { pattern: ['/pharmacy-management', '/sales-invoice-reports'], key: 'sales-invoice-reports' },
+    
+    // User Management
+    { pattern: ['/suppliers'], key: 'supplier-profiles' },
+    { pattern: ['/inventory'], key: 'medicines-inventory' },
+    { pattern: ['/patients'], key: 'patients-vouchers' },
+    { pattern: ['/sales'], key: 'sales-invoice' },
+    { pattern: ['/catalogues'], key: 'product-catalogues' },
+    { pattern: ['/orders'], key: 'orders-management' },
+    { pattern: ['/customers'], key: 'customers-profiles' },
+    { pattern: ['/analytics'], key: 'analytics-reports' },
+    { pattern: ['/users'], key: 'users-roles' },
+    { pattern: ['/user-management', '/manage-suppliers'], key: 'manage-suppliers' },
+    { pattern: ['/user-management'], key: 'user-management' },
+    
+    // Main sections
+    { pattern: ['/business'], key: 'business-operations' },
+    { pattern: ['/pos'], key: 'point-of-sales' },
+    
+    // Product Management
+    { pattern: ['/product-management', '/all-products'], key: 'all-products' },
+    { pattern: ['/product-management', '/order-management'], key: 'order-management' },
+    { pattern: ['/product-management', '/manage-categories'], key: 'manage-categories' },
+    { pattern: ['/product-management', '/products-variations'], key: 'products-variations' },
+    { pattern: ['/product-management'], key: 'product-management' },
+  ];
+
   // Determine active menu based on pathname
-  const getActiveMenuId = (): string => {
-    // More specific paths first
-    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/companies')) return 'companies';
-    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/subscriptions')) return 'subscriptions';
-    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/users')) return 'users';
-    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/modules')) return 'modules';
-    if (pathname?.includes('/dashboard/super-admin') && pathname?.includes('/reports')) return 'reports';
-    if (pathname?.includes('/dashboard/super-admin')) return 'super-admin-dashboard';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock') && pathname?.includes('/inventory')) return 'inventory';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock') && pathname?.includes('/stock-count')) return 'stock-count';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock') && pathname?.includes('/stock-transfer')) return 'stock-transfer';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/inventory-stock')) return 'inventory-stock';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/sales-management') && pathname?.includes('/manage-sales')) return 'manage-sales';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/sales-management') && pathname?.includes('/manage-quotation')) return 'manage-quotation';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/sales-management')) return 'sales-management';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/procurement-supplies') && pathname?.includes('/manage-purchases')) return 'manage-purchases';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/procurement-supplies') && pathname?.includes('/manage-importations')) return 'manage-importations';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/procurement-supplies')) return 'procurement-supplies';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/financial-management') && pathname?.includes('/income')) return 'income';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/financial-management') && pathname?.includes('/expenses')) return 'expenses';
-    if (pathname?.includes('/business-operations') && pathname?.includes('/financial-management')) return 'financial-management';
-    if (pathname?.includes('/manufacturing') && pathname?.includes('/production-planning')) return 'production-planning';
-    if (pathname?.includes('/manufacturing') && pathname?.includes('/quality-control')) return 'quality-control';
-    if (pathname?.includes('/manufacturing') && pathname?.includes('/inventory-management')) return 'inventory-management';
-    if (pathname?.includes('/manufacturing') && pathname?.includes('/production-reports')) return 'production-reports';
-    if (pathname?.includes('/manufacturing')) return 'manufacturing';
-    if (pathname?.includes('/pos-menu')) return 'pos-menu';
-    if (pathname?.includes('/point-of-sales') && pathname?.includes('/pos-orders')) return 'pos-orders';
-    if (pathname?.includes('/point-of-sales') && pathname?.includes('/print-barcodes')) return 'print-barcodes';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/transactions')) return 'transactions';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/income-summary')) return 'income-summary';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/expense-summary')) return 'expense-summary';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/invoice-summary')) return 'invoice-summary';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/purchase-report')) return 'purchase-report';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/sales-vs-purchase')) return 'sales-vs-purchase';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/tax-summary')) return 'tax-summary';
-    if (pathname?.includes('/analytics-reports') && pathname?.includes('/profits-loss')) return 'profits-loss';
-    if (pathname?.includes('/pharmacy-management') && pathname?.includes('/patients-vouchers')) return 'patients-vouchers';
-    if (pathname?.includes('/pharmacy-management') && pathname?.includes('/sales-invoice-reports')) return 'sales-invoice-reports';
-    if (pathname?.includes('/distribution-network') && pathname?.includes('/product-catalogues')) return 'product-catalogues';
-    if (pathname?.includes('/distribution-network') && pathname?.includes('/analytics-reports')) return 'analytics-reports';
-    if (pathname?.includes('/suppliers') && !pathname?.includes('/user-management')) return 'supplier-profiles';
-    if (pathname?.includes('/inventory')) return 'medicines-inventory';
-    if (pathname?.includes('/patients')) return 'patients-vouchers';
-    if (pathname?.includes('/sales')) return 'sales-invoice';
-    if (pathname?.includes('/catalogues')) return 'product-catalogues';
-    if (pathname?.includes('/orders')) return 'orders-management';
-    if (pathname?.includes('/customers')) return 'customers-profiles';
-    if (pathname?.includes('/analytics')) return 'analytics-reports';
-    if (pathname?.includes('/users')) return 'users-roles';
-    if (pathname?.includes('/user-management') && pathname?.includes('/manage-suppliers')) return 'manage-suppliers';
-    if (pathname?.includes('/user-management')) return 'user-management';
-    if (pathname?.includes('/business')) return 'business-operations';
-    if (pathname?.includes('/pos')) return 'point-of-sales';
-    if (pathname?.includes('/product-management') && pathname?.includes('/all-products')) return 'all-products';
-    if (pathname?.includes('/product-management') && pathname?.includes('/order-management')) return 'order-management';
-    if (pathname?.includes('/product-management') && pathname?.includes('/manage-categories')) return 'manage-categories';
-    if (pathname?.includes('/product-management') && pathname?.includes('/products-variations')) return 'products-variations';
-    if (pathname?.includes('/product-management')) return 'product-management';
+  const getActiveMenuKey = (): string => {
+    // Check for specific path patterns first
+    for (const { pattern, key } of pathPatterns) {
+      // Special handling for supplier profiles to avoid conflicts with user management
+      if (key === 'supplier-profiles' && pathname?.includes('/user-management')) {
+        continue;
+      }
+      
+      // Check if all pattern parts are included in the pathname
+      if (pattern.every(part => pathname?.includes(part))) {
+        return key;
+      }
+    }
+    
     // Default to dashboard
     return 'dashboard';
   };
   
-  const activeMenuId: string = getActiveMenuId();
-  
-  // Effect to close parent menus based on navigation changes
-  React.useEffect(() => {
-    // Close all parent menus when on dashboard
-    if (pathname === '/dashboard') {
-      setExpandedMenus(prev => {
-        const newSet = new Set(prev);
-        menuSections.forEach(section => {
-          section.items.forEach(item => {
-            if (item.subItems) {
-              newSet.delete(item.id);
-            }
-          });
-        });
-        return newSet;
-      });
-      return;
-    }
-    
-    // Close parent menus when another parent menu is active
-    // Find the active parent menu
-    const activeParentMenuId = menuSections.flatMap(section => 
-      section.items.filter(item => 
-        item.id === activeMenuId || 
-        (item.subItems && item.subItems.some(subItem => subItem.id === activeMenuId))
-      )
-    ).map(item => item.id)[0];
-    
-    // Close all other parent menus, but keep open parent menus that have expanded submenus
-    if (activeParentMenuId) {
-      setExpandedMenus(prev => {
-        const newSet = new Set(prev);
-        menuSections.forEach(section => {
-          section.items.forEach(item => {
-            // Only close parent menus that don't have expanded submenus
-            if (item.subItems && item.id !== activeParentMenuId) {
-              // Check if this parent menu has any expanded submenus
-              let hasExpandedSubmenus = false;
-              
-              // Check level 1 submenus
-              if (item.subItems) {
-                for (const subItem of item.subItems) {
-                  if (newSet.has(subItem.id)) {
-                    hasExpandedSubmenus = true;
-                    break;
-                  }
-                  // Check level 2 submenus
-                  if ((subItem as SubMenuItem).subItems) {
-                    for (const subSubItem of (subItem as SubMenuItem).subItems!) {
-                      if (newSet.has(subSubItem.id)) {
-                        hasExpandedSubmenus = true;
-                        break;
-                      }
-                    }
-                    if (hasExpandedSubmenus) break;
-                  }
-                }
-              }
-              
-              // Only close the parent menu if it doesn't have expanded submenus
-              if (!hasExpandedSubmenus) {
-                newSet.delete(item.id);
-              }
-            }
-          });
-        });
-        return newSet;
-      });
-    }
-  }, [pathname, activeMenuId]);
+  const activeMenuKey: string = getActiveMenuKey();
   
   // Navigation handler
-  const navigateToPage = (id: string) => {
-    switch (id) {
-      case 'dashboard':
-        router.push('/dashboard');
-        break;
-      case 'business-operations':
-        router.push('/dashboard/business-operations');
-        break;
-      case 'point-of-sales':
-        router.push('/dashboard/point-of-sales');
-        break;
-      case 'analytics-reports':
-        router.push('/dashboard/analytics-reports');
-        break;
-      case 'pharmacy-management':
-        router.push('/dashboard/pharmacy-management');
-        break;
-      case 'distribution-network':
-        router.push('/dashboard/distribution-network');
-        break;
-      case 'supplier-profiles':
-        router.push('/dashboard/suppliers');
-        break;
-      case 'manage-suppliers':
-        router.push('/dashboard/user-management/manage-suppliers');
-        break;
-      case 'users-roles':
-        router.push('/dashboard/user-management/users-roles');
-        break;
-      case 'manage-customers':
-        router.push('/dashboard/user-management/manage-customers');
-        break;
-      case 'medicines-inventory':
-        router.push('/dashboard/inventory/medicines');
-        break;
-      case 'patients-vouchers':
-        router.push('/dashboard/pharmacy-management/patients-vouchers');
-        break;
-      case 'sales-invoice-reports':
-        router.push('/dashboard/pharmacy-management/sales-invoice-reports');
-        break;
-      case 'product-catalogues':
-        router.push('/dashboard/distribution-network/product-catalogues');
-        break;
-      case 'analytics-reports':
-        router.push('/dashboard/distribution-network/analytics-reports');
-        break;
-      case 'orders-management':
-        router.push('/dashboard/orders');
-        break;
-      case 'customers-profiles':
-        router.push('/dashboard/customers/profiles');
-        break;
-      case 'all-products':
-        router.push('/dashboard/product-management/all-products');
-        break;
-      case 'order-management':
-        router.push('/dashboard/product-management/order-management');
-        break;
-      case 'manage-categories':
-        router.push('/dashboard/product-management/manage-categories');
-        break;
-      case 'products-variations':
-        router.push('/dashboard/product-management/products-variations');
-        break;
-      case 'sales-management':
-        router.push('/dashboard/business-operations/sales-management');
-        break;
-      case 'procurement-supplies':
-        router.push('/dashboard/business-operations/procurement-supplies');
-        break;
-      case 'inventory-stock':
-        router.push('/dashboard/business-operations/inventory-stock');
-        break;
-      case 'inventory':
-        router.push('/dashboard/business-operations/inventory-stock/inventory');
-        break;
-      case 'stock-count':
-        router.push('/dashboard/business-operations/inventory-stock/stock-count');
-        break;
-      case 'stock-transfer':
-        router.push('/dashboard/business-operations/inventory-stock/stock-transfer');
-        break;
-      case 'financial-management':
-        router.push('/dashboard/business-operations/financial-management');
-        break;
-        case 'manage-sales':
-        router.push('/dashboard/business-operations/sales-management/manage-sales');
-        break;
-      case 'manage-quotation':
-        router.push('/dashboard/business-operations/sales-management/manage-quotation');
-        break;
-      case 'manage-purchases':
-        router.push('/dashboard/business-operations/procurement-supplies/manage-purchases');
-        break;
-      case 'manage-importations':
-        router.push('/dashboard/business-operations/procurement-supplies/manage-importations');
-        break;
-      case 'income':
-        router.push('/dashboard/business-operations/financial-management/income');
-        break;
-      case 'expenses':
-        router.push('/dashboard/business-operations/financial-management/expenses');
-        break;
-      case 'production-planning':
-        router.push('/dashboard/manufacturing/production-planning');
-        break;
-      case 'quality-control':
-        router.push('/dashboard/manufacturing/quality-control');
-        break;
-      case 'inventory-management':
-        router.push('/dashboard/manufacturing/inventory-management');
-        break;
-      case 'production-reports':
-        router.push('/dashboard/manufacturing/production-reports');
-        break;
-      case 'pos-menu':
-        router.push('/pos-menu');
-        break;
-      case 'pos-orders':
-        router.push('/dashboard/point-of-sales/pos-orders');
-        break;
-      case 'print-barcodes':
-        router.push('/dashboard/point-of-sales/print-barcodes');
-        break;
-      case 'transactions':
-        router.push('/dashboard/analytics-reports/transactions');
-        break;
-      case 'income-summary':
-        router.push('/dashboard/analytics-reports/income-summary');
-        break;
-      case 'expense-summary':
-        router.push('/dashboard/analytics-reports/expense-summary');
-        break;
-      case 'invoice-summary':
-        router.push('/dashboard/analytics-reports/invoice-summary');
-        break;
-      case 'purchase-report':
-        router.push('/dashboard/analytics-reports/purchase-report');
-        break;
-      case 'sales-vs-purchase':
-        router.push('/dashboard/analytics-reports/sales-vs-purchase');
-        break;
-      case 'tax-summary':
-        router.push('/dashboard/analytics-reports/tax-summary');
-        break;
-      case 'profits-loss':
-        router.push('/dashboard/analytics-reports/profits-loss');
-        break;
-      // Super Admin routes
-      case 'super-admin-dashboard':
-        router.push('/dashboard/super-admin');
-        break;
-      case 'companies':
-        router.push('/dashboard/super-admin/companies');
-        break;
-      case 'subscriptions':
-        router.push('/dashboard/super-admin/subscriptions');
-        break;
-      case 'users':
-        router.push('/dashboard/super-admin/users');
-        break;
-      case 'modules':
-        router.push('/dashboard/super-admin/modules');
-        break;
-      case 'reports':
-        router.push('/dashboard/super-admin/reports');
-        break;
-      default:
-        console.log(`Navigate to page for ${id}`);
+  const navigateToPage = (key: string) => {
+    const path = navigationMap[key];
+    if (path) {
+      router.push(path);
+    } else {
+      console.log(`Navigate to page for ${key}`);
     }
   };
   
-  // Helper function to render submenus recursively
-  const renderSubMenu = (subItems: SubMenuItem[], parentActiveId: string, level: number = 1) => {
-    if (!subItems || subItems.length === 0) return null;
-    
-    return (
-      <ul className={`space-y-1 border-l-2 pl-2.5 ${level > 1 ? 'ml-0 mt-1 mb-1' : ''}`} 
-          style={{ borderLeftColor: '#DDDDDD' }}>
-        {subItems.map((subItem) => {
-          const isSubItemActive: boolean = activeMenuId === subItem.id;
-          const hasSubItems: boolean = !!subItem.subItems && subItem.subItems.length > 0;
-          const isExpanded: boolean = isMenuExpanded(subItem.id);
-          
-          // Click handler for submenu items
-          const handleSubItemClick = (e: React.MouseEvent) => {
-            e.stopPropagation();
-            
-            if (hasSubItems) {
-              // Toggle expansion for items with subitems
-              toggleMenu(subItem.id);
-            } else {
-              // Navigate to the page for leaf items
-              navigateToPage(subItem.id);
-            }
-          };
-          
-          return (
-            <React.Fragment key={subItem.id}>
-              <li 
-                className="p-2 hover:bg-white rounded-full cursor-pointer flex items-center justify-between"
-                style={{ 
-                  color: isSubItemActive ? '#85EC68' : '#8094AE',
-                  fontWeight: isSubItemActive ? 'bold' : 'normal',
-                  backgroundColor: 'transparent'
-                }}
-                onClick={handleSubItemClick}
-              >
-                <div className="flex items-center">
-                  <span className="mr-2" style={{ color: isSubItemActive ? '#85EC68' : '#8094AE' }}>
-                    {subItem.icon}
-                  </span>
-                  <span className={`text-sm ${level > 1 ? 'text-xs' : ''}`}>{subItem.label}</span>
-                </div>
-                
-                {hasSubItems && (
-                  <RightOutlined 
-                    className={`text-gray-400 text-xs transition-transform ${isExpanded ? 'rotate-90' : ''}`} 
-                    style={{ fontSize: '0.6rem', color: isSubItemActive ? '#85EC68' : '#8094AE' }} 
-                  />
-                )}
-              </li>
-              
-              {/* Render nested submenus recursively */}
-              {hasSubItems && isExpanded && (
-                <div className={`${level > 2 ? 'ml-1' : level > 1 ? 'ml-2' : 'ml-4 mt-1 mb-1'}`}>
-                  {renderSubMenu(subItem.subItems!, subItem.id, level + 1)}
-                </div>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </ul>
-    );
+  // Handle menu click
+  const onClick: MenuProps['onClick'] = (e) => {
+    navigateToPage(e.key as string);
   };
-
-  // Menu items data
-  const menuSections = [
-    {
-      title: "G E N E R A L",
-      items: [
-        { id: "dashboard", label: "Dashboard", icon: <DashboardOutlined />, section: "general" },
-        { 
-          id: "user-management", 
-          label: "User Management", 
-          icon: <UserOutlined />, 
-          section: "general",
-          subItems: [
-            { id: "users-roles", label: "Users & Roles", icon: <TeamOutlined /> },
-            { id: "manage-suppliers", label: "Manage Suppliers", icon: <ShopOutlined /> },
-            { id: "manage-customers", label: "Manage Customers", icon: <UserOutlined /> },
-          ]
-        },
-        { 
-          id: "product-management", 
-          label: "Product Management", 
-          icon: <ShoppingOutlined />, 
-          section: "general",
-          subItems: [
-            { id: "all-products", label: "All Products", icon: <AppstoreOutlined /> },
-            { id: "order-management", label: "Order Management", icon: <ContainerOutlined /> },
-            { id: "manage-categories", label: "Manage Categories", icon: <TagsOutlined /> },
-            { id: "products-variations", label: "Products Variations", icon: <FileTextOutlined /> },
-          ]
-        },
-        { 
-          id: "business-operations", 
-          label: "Business Operations", 
-          icon: <ControlOutlined />, 
-          section: "general",
-          subItems: [
-            { 
-              id: "inventory-stock", 
-              label: "Inventory & Stock", 
-              icon: <DatabaseOutlined />,
-              subItems: [
-                { id: "inventory", label: "Inventory", icon: <UnorderedListOutlined /> },
-                { id: "stock-count", label: "Stock Count", icon: <StockOutlined /> },
-                { id: "stock-transfer", label: "Stock Transfer", icon: <ExportOutlined /> },
-              ]
-            },
-            { 
-              id: "sales-management", 
-              label: "Sales Management", 
-              icon: <ShoppingCartOutlined />, 
-              subItems: [
-                { id: "manage-sales", label: "Manage Sales", icon: <ProfileOutlined /> },
-                { id: "manage-quotation", label: "Manage Quotation", icon: <FileTextOutlined /> },
-              ]
-            },
-            { 
-              id: "procurement-supplies", 
-              label: "Procurement & Supplies", 
-              icon: <ShoppingCartOutlined />, 
-              subItems: [
-                { id: "manage-purchases", label: "Manage Purchases", icon: <ShoppingCartOutlined /> },
-                { id: "manage-importations", label: "Manage Imports", icon: <ImportOutlined /> },
-              ]
-            },
-            { 
-              id: "financial-management", 
-              label: "Financial Management", 
-              icon: <DollarOutlined />, 
-              subItems: [
-                { id: "income", label: "Manage Income", icon: <BankOutlined /> },
-                { id: "expenses", label: "Manage Expenses", icon: <AccountBookOutlined /> },
-              ]
-            },
-          ]
-        },
-        { 
-          id: "point-of-sales", 
-          label: "Point of Sales (POS)", 
-          icon: <CalculatorOutlined />, 
-          section: "general",
-          subItems: [
-            { id: "pos-menu", label: "POS Menu", icon: <MenuOutlined /> },
-            { id: "pos-orders", label: "POS Orders", icon: <OrderedListOutlined /> },
-            { id: "print-barcodes", label: "Print Barcodes", icon: <PrinterOutlined /> },
-          ]
-        },
-        { 
-          id: "analytics-reports", 
-          label: "Analytics & Reports", 
-          icon: <BarChartOutlined />, 
-          section: "general",
-          subItems: [
-            { id: "transactions", label: "Transactions", icon: <TransactionOutlined /> },
-            { id: "income-summary", label: "Income Summary", icon: <FundOutlined /> },
-            { id: "expense-summary", label: "Expense Summary", icon: <AccountBookOutlined /> },
-            { id: "invoice-summary", label: "Invoice Summary", icon: <FileTextOutlined /> },
-            { id: "purchase-report", label: "Purchase Report", icon: <ShoppingCartOutlined /> },
-            { id: "sales-vs-purchase", label: "Sales Vs Purchase", icon: <LineChartOutlined /> },
-            { id: "tax-summary", label: "Tax Summary", icon: <AuditOutlined /> },
-            { id: "profits-loss", label: "Profits & Loss", icon: <PieChartOutlined /> },
-          ]
-        },
-      ]
-    },
-    {
-      title: "E - P H A R M A C Y ™",
-      items: [
-        { 
-          id: "pharmacy-management", 
-          label: "Pharmacy Management", 
-          icon: <MedicineBoxOutlined />, 
-          section: "epharmacy",
-          subItems: [
-            { id: "patients-vouchers", label: "Patients & Vouchers", icon: <UserOutlined /> },
-            { id: "sales-invoice-reports", label: "Sales Invoice & Reports", icon: <FileTextOutlined /> },
-          ]
-        },
-      ]
-    }
-
-    ,
-    {
-      title: "D - S U P P L Y  C H A I N ™",
-      items: [
-        { 
-          id: "distribution-network", 
-          label: "Distribution Network", 
-          icon: <ExportOutlined />, 
-          section: "supply-chain",
-          subItems: [
-            { id: "product-catalogues", label: "Product Catalogues", icon: <FileTextOutlined /> },
-            { id: "analytics-reports", label: "Analytics & Reports", icon: <AreaChartOutlined /> },
-          ]
-        },
-      ]
-    },
-    {
-      title: "M - A N U F A C T U R I N G",
-      items: [
-        { 
-          id: "manufacturing", 
-          label: "Manufacturing Corner", 
-          icon: <BuildOutlined />, 
-          section: "manufacturing",
-          subItems: [
-            { id: "production-planning", label: "Production Planning", icon: <ControlOutlined /> },
-            { id: "quality-control", label: "Quality Control", icon: <AuditOutlined /> },
-            { id: "inventory-management", label: "Inventory Management", icon: <DatabaseOutlined /> },
-            { id: "production-reports", label: "Production Reports", icon: <FileTextOutlined /> },
-          ]
-        },
-      ]
-    }
-    ,
-    {
-      title: "S U P E R   A D M I N",
-      items: [
-        { id: "super-admin-dashboard", label: "Dashboard", icon: <DashboardOutlined />, section: "super-admin" },
-        { id: "companies", label: "Companies", icon: <ShopOutlined />, section: "super-admin" },
-        { id: "subscriptions", label: "Subscriptions", icon: <FileTextOutlined />, section: "super-admin" },
-        { id: "users", label: "Users", icon: <UserOutlined />, section: "super-admin" },
-        { id: "modules", label: "Modules", icon: <AppstoreOutlined />, section: "super-admin" },
-        { id: "reports", label: "Reports", icon: <BarChartOutlined />, section: "super-admin" },
-      ]
-    }
+  
+  // Handle open change for submenus
+  const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
+    setOpenKeys(keys as string[]);
+  };
+  
+  // Menu items data using Ant Design Menu
+  const menuItems: MenuItem[] = [
+    getItem('G E N E R A L', 'general-section', null, [
+      getItem('Dashboard', 'dashboard', <DashboardOutlined />),
+      getItem('User Management', 'user-management', <UserOutlined />, [
+        getItem('Users & Roles', 'users-roles', <TeamOutlined />),
+        getItem('Manage Suppliers', 'manage-suppliers', <ShopOutlined />),
+        getItem('Manage Customers', 'manage-customers', <UserOutlined />),
+      ]),
+      getItem('Product Management', 'product-management', <ShoppingOutlined />, [
+        getItem('All Products', 'all-products', <AppstoreOutlined />),
+        getItem('Order Management', 'order-management', <ContainerOutlined />),
+        getItem('Manage Categories', 'manage-categories', <TagsOutlined />),
+        getItem('Products Variations', 'products-variations', <FileTextOutlined />),
+      ]),
+      getItem('Business Operations', 'business-operations', <ControlOutlined />, [
+        getItem('Inventory & Stock', 'inventory-stock', <DatabaseOutlined />, [
+          getItem('Inventory', 'inventory', <UnorderedListOutlined />),
+          getItem('Stock Count', 'stock-count', <StockOutlined />),
+          getItem('Stock Transfer', 'stock-transfer', <ExportOutlined />),
+        ]),
+        getItem('Sales Management', 'sales-management', <ShoppingCartOutlined />, [
+          getItem('Manage Sales', 'manage-sales', <ProfileOutlined />),
+          getItem('Manage Quotation', 'manage-quotation', <FileTextOutlined />),
+        ]),
+        getItem('Procurement & Supplies', 'procurement-supplies', <ShoppingCartOutlined />, [
+          getItem('Manage Purchases', 'manage-purchases', <ShoppingCartOutlined />),
+          getItem('Manage Imports', 'manage-importations', <ImportOutlined />),
+        ]),
+        getItem('Financial Management', 'financial-management', <DollarOutlined />, [
+          getItem('Manage Income', 'income', <BankOutlined />),
+          getItem('Manage Expenses', 'expenses', <AccountBookOutlined />),
+        ]),
+      ]),
+      getItem('Point of Sales (POS)', 'point-of-sales', <CalculatorOutlined />, [
+        getItem('POS Menu', 'pos-menu', <MenuOutlined />),
+        getItem('POS Orders', 'pos-orders', <OrderedListOutlined />),
+        getItem('Print Barcodes', 'print-barcodes', <PrinterOutlined />),
+      ]),
+      getItem('Analytics & Reports', 'analytics-reports', <BarChartOutlined />, [
+        getItem('Transactions', 'transactions', <TransactionOutlined />),
+        getItem('Income Summary', 'income-summary', <FundOutlined />),
+        getItem('Expense Summary', 'expense-summary', <AccountBookOutlined />),
+        getItem('Invoice Summary', 'invoice-summary', <FileTextOutlined />),
+        getItem('Purchase Report', 'purchase-report', <ShoppingCartOutlined />),
+        getItem('Sales Vs Purchase', 'sales-vs-purchase', <LineChartOutlined />),
+        getItem('Tax Summary', 'tax-summary', <AuditOutlined />),
+        getItem('Profits & Loss', 'profits-loss', <PieChartOutlined />),
+      ]),
+    ], 'group'),
+    
+    getItem('E - P H A R M A C Y ™', 'epharmacy-section', null, [
+      getItem('Pharmacy Management', 'pharmacy-management', <MedicineBoxOutlined />, [
+        getItem('Patients & Vouchers', 'patients-vouchers', <UserOutlined />),
+        getItem('Sales Invoice & Reports', 'sales-invoice-reports', <FileTextOutlined />),
+      ]),
+    ], 'group'),
+    
+    getItem('S U P P L Y  C H A I N ™', 'supply-chain-section', null, [
+      getItem('Distribution Network', 'distribution-network', <ExportOutlined />, [
+        getItem('Product Catalogues', 'product-catalogues', <FileTextOutlined />),
+        getItem('Analytics & Reports', 'distribution-analytics-reports', <AreaChartOutlined />),
+      ]),
+    ], 'group'),
+    
+    getItem('M A N U F A C T U R I N G', 'manufacturing-section', null, [
+      getItem('Manufacturing Corner', 'manufacturing', <BuildOutlined />, [
+        getItem('Production Planning', 'production-planning', <ControlOutlined />),
+        getItem('Quality Control', 'quality-control', <AuditOutlined />),
+        getItem('Inventory Management', 'inventory-management', <DatabaseOutlined />),
+        getItem('Production Reports', 'production-reports', <FileTextOutlined />),
+      ]),
+    ], 'group'),
+    
+    getItem('S U P E R   A D M I N', 'super-admin-section', null, [
+      getItem('Dashboard', 'super-admin-dashboard', <DashboardOutlined />),
+      getItem('Companies', 'companies', <ShopOutlined />),
+      getItem('Subscriptions', 'subscriptions', <FileTextOutlined />),
+      getItem('Users', 'users', <UserOutlined />),
+      getItem('Modules', 'modules', <AppstoreOutlined />),
+      getItem('Reports', 'reports', <BarChartOutlined />),
+    ], 'group'),
   ];
 
   return (
@@ -672,116 +355,22 @@ const Column2 = () => {
       </div>
       
       {/* Scrollable menu area */}
-      <div className="flex-1 overflow-y-auto p-4">
-        {menuSections.map((section, index) => (
-          <div key={index}>
-            <h2 className="text-lg font-semibold mb-2 uppercase" style={{ color: '#8094AE', letterSpacing: '1px', borderBottom: '1px solid #D3E2FD', paddingBottom: '8px' }}>
-              {section.title}
-            </h2>
-            <ul className="space-y-1" style={{ marginLeft: '-3rem'}}>
-              {section.items.map((item) => {
-                // Check if this menu item or any of its subitems is active
-                const isMenuItemActive: boolean = activeMenuId === item.id;
-                const isSubItemActive: boolean = !!(item as MenuItem).subItems?.some(subItem => activeMenuId === subItem.id);
-                const isActive: boolean = isMenuItemActive || isSubItemActive;
-                
-                // Determine if the menu should be expanded
-                const shouldMenuBeExpanded: boolean = isMenuExpanded(item.id) || isSubItemActive;
-                
-                // Navigation handler for main menu items
-                const handleMenuClick = () => {
-                  // Handle expand/collapse for items with subitems
-                  if ((item as MenuItem).subItems) {
-                    // Toggle expansion for menus with subitems
-                    toggleMenu(item.id);
-                  } else {
-                    // Navigate to the page for items without subitems
-                    navigateToPage(item.id);
-                  }
-                };
-                
-                return (
-                  <React.Fragment key={item.id}>
-                    <li 
-                      className={`p-2 rounded-full cursor-pointer flex items-center justify-between ${isActive ? 'bg-[#EAFCE5]' : 'hover:bg-white group'}`} 
-                      style={{ 
-                        color: isActive ? '#85EC68' : '#8094AE', 
-                        fontWeight: isActive ? 'bold' : 'normal'
-                      }}
-                      onMouseEnter={(e) => {
-                        // Check if this is a parent menu with active submenu
-                        const hasActiveSubmenu = (item as MenuItem).subItems?.some(subItem => activeMenuId === subItem.id);
-                        if (hasActiveSubmenu) {
-                          e.currentTarget.style.backgroundColor = '#ffffff';
-                          // Update icon and expand indicator color
-                          const iconElement = e.currentTarget.querySelector('.mr-2');
-                          if (iconElement) {
-                            (iconElement as HTMLElement).style.color = '#6E82A5';
-                          }
-                          const expandIcon = e.currentTarget.querySelector('.anticon');
-                          if (expandIcon) {
-                            (expandIcon as HTMLElement).style.color = '#6E82A5';
-                          }
-                        } else {
-                          // When parent menu is active, change hover color to #85ed68
-                          if (isActive) {
-                            e.currentTarget.style.color = '#85ed68';
-                          } else {
-                            e.currentTarget.style.fontWeight = 'bold';
-                          }
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        // Reset background color on mouse leave
-                        e.currentTarget.style.backgroundColor = '';
-                        // Reset icon and expand indicator color
-                        const iconElement = e.currentTarget.querySelector('.mr-2');
-                        if (iconElement) {
-                          const isMenuItemActiveInner = activeMenuId === item.id;
-                          const isSubItemActiveInner = !!(item as MenuItem).subItems?.some(subItem => activeMenuId === subItem.id);
-                          const isActiveInner = isMenuItemActiveInner || isSubItemActiveInner;
-                          (iconElement as HTMLElement).style.color = isActiveInner ? '#85EC68' : '#8094AE';
-                        }
-                        const expandIcon = e.currentTarget.querySelector('.anticon');
-                        if (expandIcon) {
-                          const isMenuItemActiveInner = activeMenuId === item.id;
-                          const isSubItemActiveInner = !!(item as MenuItem).subItems?.some(subItem => activeMenuId === subItem.id);
-                          const isActiveInner = isMenuItemActiveInner || isSubItemActiveInner;
-                          (expandIcon as HTMLElement).style.color = isActiveInner ? '#85EC68' : '#8094AE';
-                        }
-                        e.currentTarget.style.fontWeight = isActive ? 'bold' : 'normal';
-                        e.currentTarget.style.color = isActive ? '#85EC68' : '#8094AE';
-                      }}
-                      onClick={handleMenuClick}
-                    >
-                      <div className="flex items-center">
-                        <span 
-                          className="mr-2" 
-                          style={{ color: isActive ? '#85EC68' : '#8094AE' }}
-                        >
-                          {item.icon}
-                        </span>
-                        <span>{item.label}</span>
-                      </div>
-                      {(item as MenuItem).subItems && (
-                        <RightOutlined 
-                          className={`text-gray-400 text-xs transition-transform ${isMenuExpanded(item.id) ? 'rotate-90' : ''}`} 
-                          style={{ fontSize: '0.6rem', color: isActive ? '#85EC68' : '#8094AE' }} 
-                        />
-                      )}
-                    </li>
-                    {/* Render submenu directly under its parent */}
-                    {(item as MenuItem).subItems && shouldMenuBeExpanded && (
-                      <div className="ml-4 mt-1 mb-1">
-                        {renderSubMenu((item as MenuItem).subItems!, item.id, 1)}
-                      </div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+      <div className="flex-1 overflow-y-auto p-0">
+        <Menu
+          mode="inline"
+          openKeys={openKeys}
+          selectedKeys={[activeMenuKey]}
+          onOpenChange={onOpenChange}
+          onClick={onClick}
+          items={menuItems}
+          className="custom-menu"
+          inlineIndent={16}
+          style={{
+            backgroundColor: 'transparent',
+            border: 'none',
+            paddingLeft: '0.5rem',
+          }}
+        />
       </div>
       
       {/* Renewal & Billing Section - Fixed at bottom */}
@@ -813,6 +402,119 @@ const Column2 = () => {
           </span>
         </div>
       </div>
+      
+      <style jsx global>{`
+        .custom-menu .ant-menu-item {
+          border-radius: 9999px !important;
+          margin-bottom: 4px !important;
+          padding-left: 8px !important;
+          padding-right: 8px !important;
+          color: #8094AE !important;
+          font-weight: normal !important;
+          font-size: medium !important;
+          margin-left: 0 !important;
+        }
+        
+        .custom-menu .ant-menu-item:hover {
+          background-color: #ffffff !important;
+          color: #8094AE !important;
+          font-weight: bold !important;
+        }
+        
+        .custom-menu .ant-menu-item-selected {
+          background-color: #EAFCE5 !important;
+          color: #85EC68 !important;
+          font-weight: bold !important;
+        }
+        
+        .custom-menu .ant-menu-item-selected:hover {
+          background-color: #EAFCE5 !important;
+          color: #85EC68 !important;
+        }
+        
+        .custom-menu .ant-menu-submenu-title {
+          border-radius: 9999px !important;
+          margin-bottom: 4px !important;
+          padding-left: 8px !important;
+          padding-right: 8px !important;
+          color: #8094AE !important;
+          font-weight: normal !important;
+          font-size: medium !important;
+          margin-left: 0 !important;
+        }
+        
+        .custom-menu .ant-menu-submenu-title:hover {
+          background-color: #ffffff !important;
+          color: #8094AE !important;
+          font-weight: bold !important;
+        }
+        
+        .custom-menu .ant-menu-submenu-open > .ant-menu-submenu-title {
+          background-color: #ffffff !important;
+          color: #8094AE !important;
+          font-weight: bold !important;
+        }
+        
+        .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+          background-color: #EAFCE5 !important;
+          color: #85EC68 !important;
+          font-weight: bold !important;
+        }
+        
+        .custom-menu .ant-menu-submenu-arrow {
+          color: #8094AE !important;
+        }
+        
+        .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
+          color: #85EC68 !important;
+        }
+        
+        .custom-menu .ant-menu-sub {
+          background-color: transparent !important;
+        }
+        
+        .custom-menu .ant-menu-sub .ant-menu-item {
+          margin-left: 16px !important;
+          border-radius: 0 !important;
+          font-size: medium !important;
+          background-color: transparent !important;
+          color: #8094AE !important;
+          padding-left: 15px !important;
+        }
+        
+        .custom-menu .ant-menu-sub .ant-menu-item:hover {
+          border-left-color: #85EC68 !important;
+          background-color: transparent !important;
+          color: #8094AE !important;
+        }
+        
+        .custom-menu .ant-menu-sub .ant-menu-item-selected {
+          border-left-color: #85EC68 !important;
+          background-color: transparent !important;
+          color: #85EC68 !important;
+        }
+        
+        .custom-menu .ant-menu-item-group-title {
+          color: #8094AE !important;
+          letter-spacing: 1px !important;
+          border-bottom: 1px solid #dddddd !important;
+          padding-bottom: 8px !important;
+          margin-bottom: 22px !important;
+          margin-top: 12px !important;
+          font-size: 1.1rem !important;
+          text-transform: uppercase !important;
+          font-weight: bold !important;
+          padding-left: 0.5rem !important;
+          margin-left: 0 !important;
+          margin-left: 5px !important;
+          margin-right: 10px !important;
+        }
+        
+        .custom-menu .ant-menu-inline .ant-menu-item::after,
+        .custom-menu .ant-menu-inline .ant-menu-submenu-title::after {
+          display: none !important;
+        }
+      `}</style>
     </div>
   );
 };

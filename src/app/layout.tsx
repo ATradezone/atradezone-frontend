@@ -4,6 +4,13 @@ import { AuthProvider } from '../context/AuthContext';
 import MainLayout from '../components/shared/MainLayout';
 import { siteConfig } from '../config/site';
 import AntdClientProvider from '../components/layout/AntdClientProvider';
+import { Afacad } from 'next/font/google';
+
+const afacad = Afacad({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-primary',
+});
 
 export const metadata = {
   title: `${siteConfig.name} - Sign In`,
@@ -19,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={afacad.variable}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
