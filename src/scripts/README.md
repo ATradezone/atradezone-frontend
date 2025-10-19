@@ -1,6 +1,6 @@
 # Development Scripts
 
-This directory contains scripts to help with development and maintenance of the ATradezone application.
+This directory contains scripts to help with development and maintenance of the ATradezone™ Cloud application.
 
 ## Layout Pattern Verification Script
 

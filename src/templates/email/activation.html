@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Your Account</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="min-h-screen bg-[#f9fafd] flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-[#01363C] to-[#024a52] p-8 text-center">
+                <div class="flex justify-between items-center">
+                    <img src="https://yourdomain.com/images/atradezone-logo-big-size.png" alt="ATradezone™ Cloud Logo" class="h-10 w-auto">
+                    <img src="https://yourdomain.com/images/web-favicon.png" alt="ATradezone™ Cloud Favicon" class="h-10 w-auto">
+                </div>
+            </div>
+            
+            <div class="p-8 text-center">
+                <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Activate Your Account</h2>
+                <p class="text-gray-600 mb-8">
+                    Hello {{username}},<br><br>
+                    Welcome to ATradezone™ Cloud! Thank you for registering. Please click the button below to activate your account and get started.
+                </p>
+                
+                <a href="{{activationLink}}" class="button">Activate Account</a>
+                
+                <p class="text-gray-600 mt-8">
+                    If you didn't create an account with us, please ignore this email.
+                </p>
+            </div>
+            
+            <div class="bg-gray-50 px-8 py-6 text-center">
+                <p class="text-[#01363C] text-sm">
+                    &copy; <script>document.write(new Date().getFullYear());</script> ATradezone™ Cloud. All rights reserved.
+                </p>
+                <div class="mt-2">
+                    <a href="{{privacyPolicyLink}}" class="text-[#01363C] hover:text-[#024a52] text-sm mr-4">Privacy Policy</a>
+                    <a href="{{termsLink}}" class="text-[#01363C] hover:text-[#024a52] text-sm">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

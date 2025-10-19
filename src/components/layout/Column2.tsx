@@ -772,15 +772,7 @@ const Column2 = () => {
             onClick={() => router.push('https://www.atradezone.ca')}
             style={{ color: '#8094AE', textDecoration: 'none' }}
           >
-            © 2025 ATradezone, Inc.
-          </span> 
-          <span style={{ color: '#8094AE' }}> | </span>
-          <span 
-            className="cursor-pointer hover:underline" 
-            onClick={() => router.push('https://www.atradezone.ca/legal')}
-            style={{ color: '#8094AE', textDecoration: 'none' }}
-          >
-            Legal
+            © {new Date().getFullYear()} ATradezone™ Cloud, Inc.
           </span>
         </div>
       </div>

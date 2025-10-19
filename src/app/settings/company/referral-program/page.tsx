@@ -254,7 +254,7 @@ const ReferralProgramPage = () => {
                 </div>
                 <div className="flex items-center space-x-2 bg-blue-50 px-3 py-1 rounded-full" style={{ boxShadow: 'rgb(220, 234, 255) 0px 0px 5px 1px', backgroundColor: 'rgb(255, 255, 255)' }}>
                   <GiftOutlined style={{ color: '#86ee68' }}/>
-                  <span className="text-sm font-afacad text-blue-900">ATradezone™ Cloud Walt: </span>
+                  <span className="text-sm font-afacad text-blue-900">ATradezone™ Cloud Wallet: </span>
                   <span className="text-sm font-afacad text-blue-900">500 Frw</span>
                 </div>
               </div>
