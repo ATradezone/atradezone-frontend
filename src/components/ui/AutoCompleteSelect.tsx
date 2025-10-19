@@ -26,6 +26,7 @@ interface AutoCompleteSelectProps {
     onClick: () => void;
   };
   swapActionButtonPosition?: boolean; // New prop to control positioning
+  showClearButton?: boolean; // New prop to show/hide clear button
 }
 
 const AutoCompleteSelect = ({
@@ -43,7 +44,8 @@ const AutoCompleteSelect = ({
   placeholder = 'Select an option...',
   prefix,
   actionButton,
-  swapActionButtonPosition = false // Default to false to maintain existing behavior
+  swapActionButtonPosition = false, // Default to false to maintain existing behavior
+  showClearButton = false // Default to false to maintain existing behavior
 }: AutoCompleteSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -195,6 +197,20 @@ const AutoCompleteSelect = ({
     }
   };
 
+  const handleClear = () => {
+    setInputValue('');
+    if (onChange) {
+      onChange('');
+    }
+    // Focus the input after clearing
+    setTimeout(() => {
+      const input = wrapperRef.current?.querySelector('input');
+      if (input) {
+        input.focus();
+      }
+    }, 0);
+  };
+
   const scrollToOption = (index: number) => {
     if (optionRefs.current[index]) {
       optionRefs.current[index].scrollIntoView({
@@ -249,6 +265,19 @@ const AutoCompleteSelect = ({
             borderRadius: '8px'
           }}
         />
+        {/* Clear button - only show when there's a value and showClearButton is true */}
+        {showClearButton && inputValue && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute inset-y-0 right-10 flex items-center px-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+            style={{ width: '2.5rem', marginRight: '1.6rem' }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        )}
         {/* Position elements based on swapActionButtonPosition */}
         {swapActionButtonPosition ? (
           // Action button at the far right, dropdown arrow to its left

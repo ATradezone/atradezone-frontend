@@ -308,7 +308,13 @@ const Column2 = () => {
 
   return (
     <div 
-      className="w-64 bg-[#F8FAFD] border-r border-[#EAECF0] sticky top-0 h-screen flex flex-col"
+      className="w-64 bg-[#F8FAFD] sticky top-0 h-screen flex flex-col"
+      style={{
+        borderRight: '1px solid #e9eef6',
+        boxSizing: 'border-box',
+        marginLeft: '0.1rem',
+        paddingRight: '0.1rem',
+      }}
     >
       <div className="flex-shrink-0" style={{ minHeight: '4rem', paddingLeft: '1rem' }}>
         <div className="flex items-center h-full cursor-pointer" onClick={() => router.push('/dashboard')}>
@@ -334,9 +340,10 @@ const Column2 = () => {
             backgroundColor: 'transparent',
             border: 'none',
             paddingLeft: '0.5rem',
-            paddingRight: '0.5rem',
+            paddingRight: '0.0rem',
             width: '100%',
             boxSizing: 'border-box',
+            overflowX: 'hidden',
           }}
         />
       </div>
@@ -345,8 +352,8 @@ const Column2 = () => {
         borderRadius: '10px', 
         boxShadow: 'rgb(220, 234, 255) 0px 0px 5px 1px', 
         marginLeft: '10px', 
-        marginRight: '15px', 
-        marginBottom: '13px' 
+        marginRight: '10px', 
+        marginBottom: '12px' 
       }}> 
         <button 
           className={`w-full py-2 px-6 rounded-full font-bold text-center transition-all duration-300 text-sm ${
@@ -372,7 +379,7 @@ const Column2 = () => {
         <div className="mt-4 text-center text-xs" style={{ color: '#8094AE' }}>
           <span 
             className="cursor-pointer hover:underline" 
-            onClick={() => router.push('https://www.atradezone.ca')}
+            onClick={() => router.push('https://www.atradezone.ca  ')}
             style={{ color: '#8094AE', textDecoration: 'none' }}
           >
             © {new Date().getFullYear()} ATradezone™ Cloud, Inc.
@@ -392,11 +399,16 @@ const Column2 = () => {
           border-radius: 9999px !important;
           margin-bottom: 4px !important;
           padding-left: 8px !important;
-          padding-right: 8px !important;
+          padding-right: 12px !important;
           color: #8094AE !important;
           font-weight: normal !important;
           font-size: medium !important;
-          margin-left: 0 !important;
+          height: 36px !important;
+          line-height: 36px !important;
+          display: flex !important;
+          align-items: center !important;
+          position: relative !important;
+          min-width: 200px !important;
         }
 
         .custom-menu .ant-menu-item:hover,
@@ -423,18 +435,23 @@ const Column2 = () => {
 
         .custom-menu .ant-menu-sub {
           background-color: transparent !important;
+          padding-right: 16.3px !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
         }
 
         /* Level 2: first submenu items */
         .custom-menu .ant-menu-sub > .ant-menu-item,
         .custom-menu .ant-menu-sub > .ant-menu-submenu > .ant-menu-submenu-title {
-          margin-left: 16px !important;
+          margin-left: 20.5px !important;
           padding-left: 15px !important;
           border-left: 1px solid #e9eef6 !important;
           border-radius: 0 !important;
           background-color: transparent !important;
           height: 30px !important;
           line-height: 30px !important;
+          font-size: 14.5px !important;
         }
 
         .custom-menu .ant-menu-sub > .ant-menu-item:hover,
@@ -451,10 +468,10 @@ const Column2 = () => {
         /* Level 3: nested inside submenu */
         .custom-menu .ant-menu-sub .ant-menu-sub .ant-menu-item,
         .custom-menu .ant-menu-sub .ant-menu-sub .ant-menu-submenu-title {
-          margin-left: 39px !important;
+          margin-left: 43.5px !important;
           padding-left: 17px !important;
           border-left: 1px solid #e9eef6 !important;
-          font-size: 15px !important;
+          font-size: 14px !important;
           color: #8094AE !important;
           border-radius: 0 !important;
           height: 30px !important;
@@ -477,7 +494,7 @@ const Column2 = () => {
           border-bottom: 1px solid #e9eef6 !important;
           padding-bottom: 8px !important;
           margin: 12px 10px 22px 5px !important;
-          font-size: 1.1rem !important;
+          font-size: 1.06rem !important;
           text-transform: uppercase !important;
           font-weight: bold !important;
           padding-left: 0.5rem !important;
