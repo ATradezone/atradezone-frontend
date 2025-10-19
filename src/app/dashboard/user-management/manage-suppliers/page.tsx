@@ -461,7 +461,7 @@ const ManageSuppliersPage = () => {
         <div className="flex items-center space-x-2">
           {/* Listing Icon */}
           <div 
-            className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+            className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
             style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
             onClick={() => router.push('/dashboard/user-management')}
             title="Supplier listing"
@@ -471,7 +471,7 @@ const ManageSuppliersPage = () => {
           
           {/* Add New Supplier Icon */}
           <div 
-            className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+            className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
             style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
             onClick={() => setIsSupplierModalOpen(true)}
             title="Add new supplier"

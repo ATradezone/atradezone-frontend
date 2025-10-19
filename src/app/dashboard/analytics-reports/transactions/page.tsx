@@ -367,7 +367,7 @@ const TransactionsPage = () => {
         
         {/* Add New Item Icon */}
         <div 
-          className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+          className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
           style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)' }}
           onClick={() => console.log('Add new transaction')}
           title="Add new transaction"

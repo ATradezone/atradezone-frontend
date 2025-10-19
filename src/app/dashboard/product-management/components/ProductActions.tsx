@@ -16,7 +16,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
     <div className="flex items-center space-x-2">
       {/* Add New Product Icon */}
       <div 
-        className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+        className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
         style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
         onClick={onAddNew}
         title="Add new product"
@@ -26,7 +26,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
       
       {/* Download Icon */}
       <div 
-        className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+        className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
         style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
         onClick={onDownload}
         title="Download Report"
@@ -36,7 +36,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
       
       {/* Print Icon */}
       <div 
-        className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+        className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
         style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
         onClick={onPrint}
         title="Print Report"

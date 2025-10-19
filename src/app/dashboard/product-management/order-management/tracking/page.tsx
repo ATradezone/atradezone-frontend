@@ -438,7 +438,7 @@ const OrderTrackingPage = () => {
         <div className="flex items-center space-x-2">
           {/* Back to Orders Icon */}
           <div 
-            className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+            className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
             style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
             onClick={() => router.push('/dashboard/product-management/order-management')}
             title="Back to orders"
@@ -448,7 +448,7 @@ const OrderTrackingPage = () => {
           
           {/* Edit Order Icon */}
           <div 
-            className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+            className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
             style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
             onClick={() => console.log('Edit order')}
             title="Edit order"

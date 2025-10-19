@@ -82,7 +82,7 @@ export default function ProductManagementPage() {
     <>
       {/* Download Icon */}
       <div 
-        className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+        className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
         style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
         onClick={() => setIsDownloadModalOpen(true)}
         title="Download Report"
@@ -92,7 +92,7 @@ export default function ProductManagementPage() {
       
       {/* Print Icon */}
       <div 
-        className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+        className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
         style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)', marginRight: '0.1rem', marginTop: '1.5em' }}
         onClick={() => console.log('Print report')}
         title="Print Report"

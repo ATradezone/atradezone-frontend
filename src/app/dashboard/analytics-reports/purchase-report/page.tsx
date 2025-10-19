@@ -323,7 +323,7 @@ const PurchaseReportPage = () => {
 
           {/* Pagination Skeleton */}
           <div className="px-6 py-4 border-t border-[#F2F2F2] flex items-center justify-between bg-[#F1F4F9] rounded-b-xl">
-            <div className="h-4 bg-gray-300 rounded w-48 animate-pulse"></div>
+            <div className="h-4 bg-gray-3300 rounded w-48 animate-pulse"></div>
             <div className="flex items-center space-x-4">
               <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>
               <div className="h-4 bg-gray-300 rounded w-24 animate-pulse"></div>
@@ -348,7 +348,7 @@ const PurchaseReportPage = () => {
         
         {/* Add New Item Icon */}
         <div 
-          className="h-8 w-8 rounded-[0.45rem] flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
+          className="h-8 w-8 rounded-[0.45rem] mr-0.5 flex items-center justify-center border border-gray-800 shadow-sm cursor-pointer"
           style={{ backgroundColor: 'rgb(249 250 251)', border: 'solid 1px rgb(31 41 55)' }}
           onClick={() => console.log('Add new purchase')}
           title="Add new purchase"
