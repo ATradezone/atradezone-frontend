@@ -14,7 +14,7 @@ import { Validation } from '@/components/shared';
 
 export default function Onboarding() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedSubOptions, setSelectedSubOptions] = useState<string[]>([]); // For Pharmacy sub-options
+  const [selectedSubOptions, setSelectedSubOptions] = useState<string[]>([]); // For Trading sub-options
   const [customCategory, setCustomCategory] = useState<string>('');
   const [showCustomInput, setShowCustomInput] = useState<boolean>(false);
   const [showSubOptionsOverlay, setShowSubOptionsOverlay] = useState<boolean>(false); // To show/hide sub-options overlay
@@ -89,24 +89,21 @@ export default function Onboarding() {
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
     
-    // Show sub-options if Pharmacy is selected
-    if (categoryId === 'healthcare') {
+    // Show sub-options only if General Trading is selected (remove Pharmacy)
+    if (categoryId === 'general-trading') {
       setShowSubOptionsOverlay(true);
-      setSelectedSubOptions([]); // Reset sub-options when Pharmacy is selected
+      setSelectedSubOptions([]); // Reset sub-options when General Trading is selected
     } else {
       setShowSubOptionsOverlay(false);
       setSelectedSubOptions([]); // Clear sub-options for other categories
     }
     
-    if (categoryId === 'other') {
-      setShowCustomInput(true);
-    } else {
-      setShowCustomInput(false);
-      setCustomCategory('');
-    }
+    // Remove the Other category logic
+    setShowCustomInput(false);
+    setCustomCategory('');
   };
 
-  // Handle sub-option selection for Pharmacy
+  // Handle sub-option selection for General Trading only
   const handleSubOptionSelect = (option: string) => {
     setSelectedSubOptions(prev => {
       if (prev.includes(option)) {
@@ -120,75 +117,103 @@ export default function Onboarding() {
   };
 
   const handleContinue = () => {
-    if (selectedCategory) {
-      let categoryToSend = selectedCategory;
-      
-      // If "Other" is selected, use the custom category name
-      if (selectedCategory === 'other') {
-        categoryToSend = customCategory;
-      }
-      
-      // If Pharmacy is selected with sub-options, append them to the category
-      if (selectedCategory === 'healthcare' && selectedSubOptions.length > 0) {
-        const subOptions = selectedSubOptions.join(',');
-        categoryToSend = `healthcare:${subOptions}`;
-      }
-      
-      // Redirect to the register page with the selected category as a query parameter
-      router.push(`/auth/register?userCategory=${encodeURIComponent(categoryToSend)}&businessName=${encodeURIComponent(businessName)}&email=${encodeURIComponent(email)}`);
-    }
+    // Redirect to the renewal-billing page
+    router.push('/settings/company/renewal-billing');
   };
 
   const categories = [
     { 
+      id: 'general-trading', 
+      name: 'General Trading', 
+      description: 'General trading services and product distribution',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 w-8 h-8">
+          <path d="M14 11V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/>
+          <path d="M14 11h8v8a2 2 0 0 1-2 2h-6v-8a2 2 0 0 0-2-2z"/>
+          <path d="m9 15 3-3 3 3"/>
+        </svg>
+      )
+    },
+    { 
       id: 'healthcare', 
       name: 'Pharmacy', 
       description: 'Pharmaceutical services and medication providers',
-      icon: '🏥'
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 w-8 h-8">
+          <path d="M7 11V7a1 1 0 0 1 2 0v4"/>
+          <path d="M11 11V7a1 1 0 0 1 2 0v4"/>
+          <path d="M15 11V7a1 1 0 0 1 2 0v4"/>
+          <path d="M3 3v18h18V3H3z"/>
+          <path d="M3 9h18"/>
+          <path d="M3 15h18"/>
+        </svg>
+      )
     },
     { 
       id: 'manufacturing', 
       name: 'Manufacturing', 
       description: 'Production and manufacturing operations',
-      icon: '🏭'
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 w-8 h-8">
+          <path d="m12 14 4-4"/>
+          <path d="m12 14-4-4"/>
+          <path d="M12 14v8"/>
+          <path d="M4 20h16"/>
+          <path d="M6 16h12"/>
+          <path d="M8 12h8"/>
+          <path d="M10 8h4"/>
+        </svg>
+      )
     },
     { 
       id: 'construction', 
       name: 'Construction', 
       description: 'Building, renovation, and construction services',
-      icon: '🏗️'
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 w-8 h-8">
+          <path d="M12 2v20"/>
+          <path d="M6 2v20"/>
+          <path d="M18 2v20"/>
+          <path d="M2 6h20"/>
+          <path d="M2 12h20"/>
+          <path d="M2 18h20"/>
+        </svg>
+      )
     },
     { 
       id: 'developer', 
       name: 'Developer', 
       description: 'Integrate with our EBM API for custom solutions',
-      icon: '💻'
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 w-8 h-8">
+          <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+        </svg>
+      )
     },
     { 
       id: 'business-partner', 
       name: 'Business Partner', 
       description: 'Strategic partnerships and collaborations',
-      icon: '🤝'
-    },
-    { 
-      id: 'other', 
-      name: 'Other', 
-      description: 'Specify your own business category',
-      icon: '📝'
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 w-8 h-8">
+          <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      )
     }
   ];
 
-  // Sub-options for Pharmacy
+  // Sub-options for Trading (remove Pharmacy)
   const pharmacySubOptions = [
     { 
       id: 'retail', 
       name: 'Retail', 
-      description: 'Retail pharmacy services'
+      description: 'Retail trading services'
     },
     { 
       id: 'supplier', 
       name: 'Supplier', 
-      description: 'Pharmaceutical supplier services'
+      description: 'Product supplier services'
     }
   ];
 
@@ -320,88 +345,93 @@ export default function Onboarding() {
             
             {/* Sub-options overlay — now outside scrollable area */}
             {showSubOptionsOverlay && (
-              <div className="absolute inset-0 bg-white rounded-lg p-4 flex flex-col z-10">
-                <StatCard className="flex-grow flex flex-col h-full">
-                  <div className="flex justify-between items-center mt-3">
-                    <SectionHeader 
-                      title="Please specify your business type"
-                      className="text-lg font-bold"
-                    />
-                  </div>
-                  <div className="h-px bg-[#EAECF0] mt-2 mb-6"></div>
-                  <p className="text-gray-600 mb-8 text-sm">Select all that apply to your business</p>
-                 
-                  <div className="space-y-6 mb-0 flex-grow">
-                    {/* Retail option */}
-                    <div 
-                      className="cursor-pointer"
-                      onClick={() => handleSubOptionSelect('retail')}
+              <div className="absolute inset-0 bg-white rounded-lg m-6 flex flex-col z-10">
+                <div className="flex justify-between items-center mt-3">
+                  <SectionHeader 
+                    title="Please specify your business type"
+                    className="text-lg font-bold"
+                  />
+                </div>
+                <div className="h-px bg-[#EAECF0] mt-2 mb-0"></div>
+                <p className="text-gray-600 mb-8 text-sm">
+                  Select all that apply to your{' '}
+                  <span className="text-[#85eb68] font-medium">
+                    General Trading
+                  </span>{' '}
+                  business.
+                </p>
+               
+                <div className="space-y-6 mb-0 flex-grow">
+                  {/* Retail option */}
+                  <div 
+                    className="cursor-pointer"
+                    onClick={() => handleSubOptionSelect('retail')}
+                  >
+                    <StatCard 
+                      className={`p-4 rounded-lg border transition-all ${
+                        selectedSubOptions.includes('retail')
+                          ? 'border-emerald-500 bg-emerald-50'
+                          : 'border-gray-200 hover:border-emerald-300'
+                      }`}
                     >
-                      <StatCard 
-                        className={`p-6 rounded-lg border transition-all ${
+                      <div className="flex items-start">
+                        <div className={`w-6 h-6 rounded border mr-4 flex items-center justify-center mt-1 ${
                           selectedSubOptions.includes('retail')
-                            ? 'border-emerald-500 bg-emerald-50'
-                            : 'border-gray-200 hover:border-emerald-300'
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-6 h-6 rounded border mr-4 flex items-center justify-center ${
-                            selectedSubOptions.includes('retail')
-                              ? 'bg-emerald-500 border-emerald-500'
-                              : 'border-gray-300'
-                          }`}>
-                            {selectedSubOptions.includes('retail') && (
-                              <CheckOutlined className="text-white text-sm" />
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-bold text-gray-800 text-xl">Retail</div>
-                            <div className="text-gray-600 mt-2 text-lg">Retail pharmacy services</div>
-                          </div>
+                            ? 'bg-emerald-500 border-emerald-500'
+                            : 'border-gray-300'
+                        }`}>
+                          {selectedSubOptions.includes('retail') && (
+                            <CheckOutlined className="text-white text-sm" />
+                          )}
                         </div>
-                      </StatCard>
-                    </div>
-                    
-                    {/* Divider between Retail and Supplier */}
-                    <div className="h-px bg-[#EAECF0]"></div>
-                    
-                    {/* Supplier option */}
-                    <div 
-                      className="cursor-pointer"
-                      onClick={() => handleSubOptionSelect('supplier')}
-                    >
-                      <StatCard 
-                        className={`p-6 rounded-lg border transition-all ${
-                          selectedSubOptions.includes('supplier')
-                            ? 'border-emerald-500 bg-emerald-50'
-                            : 'border-gray-200 hover:border-emerald-300'
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-6 h-6 rounded border mr-4 flex items-center justify-center ${
-                            selectedSubOptions.includes('supplier')
-                              ? 'bg-emerald-500 border-emerald-500'
-                              : 'border-gray-300'
-                          }`}>
-                            {selectedSubOptions.includes('supplier') && (
-                              <CheckOutlined className="text-white text-sm" />
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-bold text-gray-800 text-xl">Supplier</div>
-                            <div className="text-gray-600 mt-2 text-lg">Pharmaceutical supplier services</div>
-                          </div>
+                        <div>
+                          <div className="font-bold text-gray-800 text-xl">Retail</div>
+                          <div className="text-gray-600 mt-2 text-lg">Retail trading services</div>
                         </div>
-                      </StatCard>
-                    </div>
+                      </div>
+                    </StatCard>
                   </div>
-                </StatCard>
+                  
+                  {/* Divider between Retail and Supplier */}
+                  <div className="h-px bg-[#EAECF0]"></div>
+                  
+                  {/* Supplier option */}
+                  <div 
+                    className="cursor-pointer"
+                    onClick={() => handleSubOptionSelect('supplier')}
+                  >
+                    <StatCard 
+                      className={`p-4 rounded-lg border transition-all ${
+                        selectedSubOptions.includes('supplier')
+                          ? 'border-emerald-500 bg-emerald-50'
+                          : 'border-gray-200 hover:border-emerald-300'
+                      }`}
+                    >
+                      <div className="flex items-start">
+                        <div className={`w-6 h-6 rounded border mr-4 flex items-center justify-center mt-1 ${
+                          selectedSubOptions.includes('supplier')
+                            ? 'bg-emerald-500 border-emerald-500'
+                            : 'border-gray-300'
+                        }`}>
+                          {selectedSubOptions.includes('supplier') && (
+                            <CheckOutlined className="text-white text-sm" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-bold text-gray-800 text-xl">Supplier</div>
+                          <div className="text-gray-600 mt-2 text-lg">Product supplier services</div>
+                        </div>
+                      </div>
+                    </StatCard>
+                  </div>
+                </div>
                 
-                <div className="flex justify-center space-x-3 mt-4">
+                <div className="flex justify-center space-x-3 mt-6">
                   <Button
                     variant="secondary"
                     onClick={handleCancelSubOptions}
-                    className="flex-1 max-w-xs h-10 rounded-xl font-semibold"
+                    className="flex-1 h-9 sm:h-10 rounded-full text-sm sm:text-base"
+                    style={{ fontFamily: "'Afacad', sans-serif" }}
                   >
                     Cancel
                   </Button>
@@ -409,7 +439,8 @@ export default function Onboarding() {
                     variant="primary"
                     onClick={handleConfirmSubOptions}
                     disabled={selectedSubOptions.length === 0}
-                    className="flex-1 max-w-xs h-10 rounded-xl font-semibold disabled:bg-gray-200 disabled:text-gray-500"
+                    className="flex-1 h-9 sm:h-10 rounded-full text-sm sm:text-base disabled:bg-gray-200 disabled:text-gray-500"
+                    style={{ fontFamily: "'Afacad', sans-serif" }}
                   >
                     Confirm Selection
                   </Button>
@@ -427,29 +458,12 @@ export default function Onboarding() {
                   (selectedCategory === 'other' && !customCategory.trim()) ||
                   (showSubOptionsOverlay)
                 }
-                className={`w-full h-12 rounded-xl font-semibold text-base transition-all duration-300 transform hover:scale-[1.02] ${
-                  (selectedCategory && 
-                   (selectedCategory !== 'other' || customCategory.trim()) &&
-                   (!showSubOptionsOverlay))
-                    ? 'hover:opacity-90 cursor-pointer shadow-lg' 
-                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                }`}
+                className="w-full h-9 sm:h-10 rounded-full text-sm sm:text-base"
+                style={{ fontFamily: "'Afacad', sans-serif" }}
               >
                 Continue
               </Button>
             </div>
-          </div>
-          
-          <div className="mt-4 sm:mt-6 text-center">
-            <p className="text-xs sm:text-sm text-gray-600">
-              Already have an account?{' '}
-              <span 
-                className="text-emerald-600 hover:text-[#29DB5C] font-medium transition-colors cursor-pointer" 
-                onClick={() => router.push('/auth/login')}
-              >
-                Sign in
-              </span>
-            </p>
           </div>
         </div>
       </div>

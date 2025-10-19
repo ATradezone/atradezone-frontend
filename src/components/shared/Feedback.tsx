@@ -72,7 +72,7 @@ const Feedback: React.FC<FeedbackProps> = ({ message, description, mode, duratio
             <>
               <span className="font-medium">{message}</span>
               <div className="mt-0.5">
-                <span className="text-sm opacity-80">{description || defaultDescription}</span>
+                <span className="text-sm opacity-80" style={{ whiteSpace: 'pre-line' }}>{description || defaultDescription}</span>
               </div>
             </>
           )}

@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import PageTitle from '@/components/ui/PageTitle';
 import AuthBranding from '@/app/auth/components/AuthBranding';
 import { Alert } from 'antd';
+import Feedback from '@/components/shared/Feedback';
 
 export default function VerifyAccount() {
   const router = useRouter();
@@ -16,9 +17,18 @@ export default function VerifyAccount() {
   const businessName = searchParams.get('businessName') || '';
   const email = searchParams.get('email') || '';
 
+  // State for feedback visibility
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  // For SSR compatibility, we'll use a fixed value initially
+  // In a real application, this would be based on the actual expiration time from the backend
+  const remainingHours = 24;
+
   const handleResendEmail = () => {
     // In a real application, this would trigger an API call to resend the verification email
     console.log('Resend verification email');
+    // Show feedback to user
+    setShowFeedback(true);
   };
 
   const handleBackToSignIn = () => {
@@ -73,7 +83,7 @@ export default function VerifyAccount() {
               message="Important"
               description={
                 <div className="text-left text-xs" style={{ fontFamily: "'Afacad', sans-serif" }}>
-                  <p className="font-semibold">Verification link expires in 24 hours.</p>
+                  <p className="font-semibold">Verification link expires in {remainingHours} hours.</p>
                   <p>Please verify your account within this time period.</p>
                 </div>
               }
@@ -121,6 +131,15 @@ export default function VerifyAccount() {
           </div>
         </div>
       </div>
+      {showFeedback && (
+        <Feedback
+          message="Email Resent Successfully"
+          description="We've resent the verification email to your inbox.\nlease check your email and follow the instructions to verify your account."
+          mode="live"
+          duration={5000}
+          onClose={() => setShowFeedback(false)}
+        />
+      )}
     </div>
   );
 }

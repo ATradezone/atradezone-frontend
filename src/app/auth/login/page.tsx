@@ -38,8 +38,8 @@ const LoginPage: React.FC = () => {
       
       await new Promise(resolve => setTimeout(resolve, 2000));
       // Handle login logic here
-      // Redirect to dashboard after successful login
-      router.push('/dashboard');
+      // Redirect to onboarding after successful login
+      router.push('/account/onboarding');
     } catch (error) {
       // Show error message
       setValidationMessage('Login failed. Please check your credentials.');
