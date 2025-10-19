@@ -42,7 +42,6 @@ import { usePathname, useRouter } from 'next/navigation';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-// Helper function to create menu items
 const getItem = (
   label: React.ReactNode,
   key: React.Key,
@@ -65,7 +64,6 @@ const Column2 = () => {
   const pathname = usePathname();
   const router = useRouter();
   
-  // Navigation mapping
   const navigationMap: Record<string, string> = {
     'dashboard': '/dashboard',
     'business-operations': '/dashboard/business-operations',
@@ -124,9 +122,7 @@ const Column2 = () => {
     'distribution-analytics-reports': '/dashboard/distribution-network/analytics-reports',
   };
 
-  // Path matching patterns for active menu detection
   const pathPatterns: Array<{ pattern: string[], key: string }> = [
-    // Super Admin routes (more specific first)
     { pattern: ['/dashboard/super-admin', '/companies'], key: 'companies' },
     { pattern: ['/dashboard/super-admin', '/subscriptions'], key: 'subscriptions' },
     { pattern: ['/dashboard/super-admin', '/users'], key: 'users' },
@@ -134,40 +130,33 @@ const Column2 = () => {
     { pattern: ['/dashboard/super-admin', '/reports'], key: 'reports' },
     { pattern: ['/dashboard/super-admin'], key: 'super-admin-dashboard' },
     
-    // Business Operations - Inventory & Stock
     { pattern: ['/business-operations', '/inventory-stock', '/inventory'], key: 'inventory' },
     { pattern: ['/business-operations', '/inventory-stock', '/stock-count'], key: 'stock-count' },
     { pattern: ['/business-operations', '/inventory-stock', '/stock-transfer'], key: 'stock-transfer' },
     { pattern: ['/business-operations', '/inventory-stock'], key: 'inventory-stock' },
     
-    // Business Operations - Sales Management
     { pattern: ['/business-operations', '/sales-management', '/manage-sales'], key: 'manage-sales' },
     { pattern: ['/business-operations', '/sales-management', '/manage-quotation'], key: 'manage-quotation' },
     { pattern: ['/business-operations', '/sales-management'], key: 'sales-management' },
     
-    // Business Operations - Procurement & Supplies
     { pattern: ['/business-operations', '/procurement-supplies', '/manage-purchases'], key: 'manage-purchases' },
     { pattern: ['/business-operations', '/procurement-supplies', '/manage-importations'], key: 'manage-importations' },
     { pattern: ['/business-operations', '/procurement-supplies'], key: 'procurement-supplies' },
     
-    // Business Operations - Financial Management
     { pattern: ['/business-operations', '/financial-management', '/income'], key: 'income' },
     { pattern: ['/business-operations', '/financial-management', '/expenses'], key: 'expenses' },
     { pattern: ['/business-operations', '/financial-management'], key: 'financial-management' },
     
-    // Manufacturing
     { pattern: ['/manufacturing', '/production-planning'], key: 'production-planning' },
     { pattern: ['/manufacturing', '/quality-control'], key: 'quality-control' },
     { pattern: ['/manufacturing', '/inventory-management'], key: 'inventory-management' },
     { pattern: ['/manufacturing', '/production-reports'], key: 'production-reports' },
     { pattern: ['/manufacturing'], key: 'manufacturing' },
     
-    // Point of Sales
     { pattern: ['/pos-menu'], key: 'pos-menu' },
     { pattern: ['/point-of-sales', '/pos-orders'], key: 'pos-orders' },
     { pattern: ['/point-of-sales', '/print-barcodes'], key: 'print-barcodes' },
     
-    // Analytics & Reports
     { pattern: ['/analytics-reports', '/transactions'], key: 'transactions' },
     { pattern: ['/analytics-reports', '/income-summary'], key: 'income-summary' },
     { pattern: ['/analytics-reports', '/expense-summary'], key: 'expense-summary' },
@@ -177,15 +166,12 @@ const Column2 = () => {
     { pattern: ['/analytics-reports', '/tax-summary'], key: 'tax-summary' },
     { pattern: ['/analytics-reports', '/profits-loss'], key: 'profits-loss' },
     
-    // Distribution Network
     { pattern: ['/distribution-network', '/product-catalogues'], key: 'product-catalogues' },
     { pattern: ['/distribution-network', '/analytics-reports'], key: 'distribution-analytics-reports' },
     
-    // Pharmacy Management
     { pattern: ['/pharmacy-management', '/patients-vouchers'], key: 'patients-vouchers' },
     { pattern: ['/pharmacy-management', '/sales-invoice-reports'], key: 'sales-invoice-reports' },
     
-    // User Management
     { pattern: ['/suppliers'], key: 'supplier-profiles' },
     { pattern: ['/inventory'], key: 'medicines-inventory' },
     { pattern: ['/patients'], key: 'patients-vouchers' },
@@ -198,11 +184,9 @@ const Column2 = () => {
     { pattern: ['/user-management', '/manage-suppliers'], key: 'manage-suppliers' },
     { pattern: ['/user-management'], key: 'user-management' },
     
-    // Main sections
     { pattern: ['/business'], key: 'business-operations' },
     { pattern: ['/pos'], key: 'point-of-sales' },
     
-    // Product Management
     { pattern: ['/product-management', '/all-products'], key: 'all-products' },
     { pattern: ['/product-management', '/order-management'], key: 'order-management' },
     { pattern: ['/product-management', '/manage-categories'], key: 'manage-categories' },
@@ -210,48 +194,35 @@ const Column2 = () => {
     { pattern: ['/product-management'], key: 'product-management' },
   ];
 
-  // Determine active menu based on pathname
   const getActiveMenuKey = (): string => {
-    // Check for specific path patterns first
     for (const { pattern, key } of pathPatterns) {
-      // Special handling for supplier profiles to avoid conflicts with user management
       if (key === 'supplier-profiles' && pathname?.includes('/user-management')) {
         continue;
       }
-      
-      // Check if all pattern parts are included in the pathname
       if (pattern.every(part => pathname?.includes(part))) {
         return key;
       }
     }
-    
-    // Default to dashboard
     return 'dashboard';
   };
   
   const activeMenuKey: string = getActiveMenuKey();
   
-  // Navigation handler
   const navigateToPage = (key: string) => {
     const path = navigationMap[key];
     if (path) {
       router.push(path);
-    } else {
-      console.log(`Navigate to page for ${key}`);
     }
   };
   
-  // Handle menu click
   const onClick: MenuProps['onClick'] = (e) => {
     navigateToPage(e.key as string);
   };
   
-  // Handle open change for submenus
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     setOpenKeys(keys as string[]);
   };
   
-  // Menu items data using Ant Design Menu
   const menuItems: MenuItem[] = [
     getItem('G E N E R A L', 'general-section', null, [
       getItem('Dashboard', 'dashboard', <DashboardOutlined />),
@@ -338,13 +309,8 @@ const Column2 = () => {
   return (
     <div 
       className="w-64 bg-[#F8FAFD] border-r border-[#EAECF0] sticky top-0 h-screen flex flex-col"
-      style={{ backgroundColor: '#F8FAFD', borderRight: '1px solid #EAECF0' }}
     >
-      {/* Sticky logo area */}
-      <div 
-        className="flex-shrink-0"
-        style={{ backgroundColor: '#F8FAFD', minHeight: '4rem', paddingLeft: '1rem', paddingRight: '0rem', paddingTop: '0rem', paddingBottom: '0rem' }}
-      >
+      <div className="flex-shrink-0" style={{ minHeight: '4rem', paddingLeft: '1rem' }}>
         <div className="flex items-center h-full cursor-pointer" onClick={() => router.push('/dashboard')}>
           <img 
             src="/images/atradezone-logo-big-size.png" 
@@ -354,7 +320,6 @@ const Column2 = () => {
         </div>
       </div>
       
-      {/* Scrollable menu area */}
       <div className="flex-1 overflow-y-auto p-0">
         <Menu
           mode="inline"
@@ -369,29 +334,41 @@ const Column2 = () => {
             backgroundColor: 'transparent',
             border: 'none',
             paddingLeft: '0.5rem',
+            paddingRight: '0.5rem',
+            width: '100%',
+            boxSizing: 'border-box',
           }}
         />
       </div>
       
-      {/* Renewal & Billing Section - Fixed at bottom */}
-      <div className="bg-gray-50 p-4 rounded-lg flex-shrink-0 ml-10" style={{ borderRadius: '10px', boxShadow: 'rgb(220, 234, 255) 0px 0px 5px 1px', marginLeft: '10px', marginRight: '15px', marginBottom: '13px' }}> 
+      <div className="bg-gray-50 p-4 rounded-lg flex-shrink-0 ml-10" style={{ 
+        borderRadius: '10px', 
+        boxShadow: 'rgb(220, 234, 255) 0px 0px 5px 1px', 
+        marginLeft: '10px', 
+        marginRight: '15px', 
+        marginBottom: '13px' 
+      }}> 
         <button 
           className={`w-full py-2 px-6 rounded-full font-bold text-center transition-all duration-300 text-sm ${
             isBillingHovered 
               ? 'bg-white shadow-lg transform -translate-y-1' 
               : 'bg-white shadow-sm'
           }`}
-          style={{ color: '#8094AE', border: 'none', backgroundColor: '#ffffff', boxShadow: 'rgb(220, 234, 255) 0px -2px 10px 1px', paddingTop: '0.5rem', paddingBottom: '0.3rem' }}
+          style={{ 
+            color: '#8094AE', 
+            border: 'none', 
+            backgroundColor: '#ffffff', 
+            boxShadow: 'rgb(220, 234, 255) 0px -2px 10px 1px', 
+            paddingTop: '0.5rem', 
+            paddingBottom: '0.3rem' 
+          }}
           onMouseEnter={() => setIsBillingHovered(true)}
           onMouseLeave={() => setIsBillingHovered(false)}
-          onClick={() => {
-            router.push('/settings/company/renewal-billing');
-          }}
+          onClick={() => router.push('/settings/company/renewal-billing')}
         >
           RENEWAL & BILLING
         </button>
         
-        {/* Copyright Text */}
         <div className="mt-4 text-center text-xs" style={{ color: '#8094AE' }}>
           <span 
             className="cursor-pointer hover:underline" 
@@ -404,34 +381,13 @@ const Column2 = () => {
       </div>
       
       <style jsx global>{`
-        .custom-menu .ant-menu-item {
-          border-radius: 9999px !important;
-          margin-bottom: 4px !important;
-          padding-left: 8px !important;
-          padding-right: 8px !important;
-          color: #8094AE !important;
-          font-weight: normal !important;
-          font-size: medium !important;
-          margin-left: 0 !important;
+        /* Ensure Afacad font is used everywhere */
+        .custom-menu .ant-menu,
+        .custom-menu .ant-menu * {
+          font-family: var(--font-primary, sans-serif) !important;
         }
-        
-        .custom-menu .ant-menu-item:hover {
-          background-color: #ffffff !important;
-          color: #8094AE !important;
-          font-weight: bold !important;
-        }
-        
-        .custom-menu .ant-menu-item-selected {
-          background-color: #EAFCE5 !important;
-          color: #85EC68 !important;
-          font-weight: bold !important;
-        }
-        
-        .custom-menu .ant-menu-item-selected:hover {
-          background-color: #EAFCE5 !important;
-          color: #85EC68 !important;
-        }
-        
+
+        .custom-menu .ant-menu-item,
         .custom-menu .ant-menu-submenu-title {
           border-radius: 9999px !important;
           margin-bottom: 4px !important;
@@ -442,74 +398,91 @@ const Column2 = () => {
           font-size: medium !important;
           margin-left: 0 !important;
         }
-        
+
+        .custom-menu .ant-menu-item:hover,
         .custom-menu .ant-menu-submenu-title:hover {
           background-color: #ffffff !important;
           color: #8094AE !important;
           font-weight: bold !important;
         }
-        
-        .custom-menu .ant-menu-submenu-open > .ant-menu-submenu-title {
-          background-color: #ffffff !important;
-          color: #8094AE !important;
-          font-weight: bold !important;
-        }
-        
+
+        .custom-menu .ant-menu-item-selected,
         .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
           background-color: #EAFCE5 !important;
           color: #85EC68 !important;
           font-weight: bold !important;
         }
-        
+
         .custom-menu .ant-menu-submenu-arrow {
           color: #8094AE !important;
         }
-        
+
         .custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
           color: #85EC68 !important;
         }
-        
+
         .custom-menu .ant-menu-sub {
           background-color: transparent !important;
         }
-        
-        .custom-menu .ant-menu-sub .ant-menu-item {
+
+        /* Level 2: first submenu items */
+        .custom-menu .ant-menu-sub > .ant-menu-item,
+        .custom-menu .ant-menu-sub > .ant-menu-submenu > .ant-menu-submenu-title {
           margin-left: 16px !important;
-          border-radius: 0 !important;
-          font-size: medium !important;
-          background-color: transparent !important;
-          color: #8094AE !important;
           padding-left: 15px !important;
-        }
-        
-        .custom-menu .ant-menu-sub .ant-menu-item:hover {
-          border-left-color: #85EC68 !important;
+          border-left: 1px solid #e9eef6 !important;
+          border-radius: 0 !important;
           background-color: transparent !important;
+          height: 30px !important;
+          line-height: 30px !important;
+        }
+
+        .custom-menu .ant-menu-sub > .ant-menu-item:hover,
+        .custom-menu .ant-menu-sub > .ant-menu-submenu:hover > .ant-menu-submenu-title {
+          border-left-color: #85EC68 !important;
           color: #8094AE !important;
         }
-        
-        .custom-menu .ant-menu-sub .ant-menu-item-selected {
+
+        .custom-menu .ant-menu-sub > .ant-menu-item-selected {
           border-left-color: #85EC68 !important;
-          background-color: transparent !important;
           color: #85EC68 !important;
         }
-        
+
+        /* Level 3: nested inside submenu */
+        .custom-menu .ant-menu-sub .ant-menu-sub .ant-menu-item,
+        .custom-menu .ant-menu-sub .ant-menu-sub .ant-menu-submenu-title {
+          margin-left: 39px !important;
+          padding-left: 17px !important;
+          border-left: 1px solid #e9eef6 !important;
+          font-size: 15px !important;
+          color: #8094AE !important;
+          border-radius: 0 !important;
+          height: 30px !important;
+          line-height: 30px !important;
+        }
+
+        .custom-menu .ant-menu-sub .ant-menu-sub .ant-menu-item:hover {
+          border-left-color: #85EC68 !important;
+          color: #6b7280 !important;
+        }
+
+        .custom-menu .ant-menu-sub .ant-menu-sub .ant-menu-item-selected {
+          color: #85EC68 !important;
+          border-left-color: #85EC68 !important;
+        }
+
         .custom-menu .ant-menu-item-group-title {
           color: #8094AE !important;
           letter-spacing: 1px !important;
-          border-bottom: 1px solid #dddddd !important;
+          border-bottom: 1px solid #e9eef6 !important;
           padding-bottom: 8px !important;
-          margin-bottom: 22px !important;
-          margin-top: 12px !important;
+          margin: 12px 10px 22px 5px !important;
           font-size: 1.1rem !important;
           text-transform: uppercase !important;
           font-weight: bold !important;
           padding-left: 0.5rem !important;
-          margin-left: 0 !important;
-          margin-left: 5px !important;
-          margin-right: 10px !important;
         }
-        
+
         .custom-menu .ant-menu-inline .ant-menu-item::after,
         .custom-menu .ant-menu-inline .ant-menu-submenu-title::after {
           display: none !important;
