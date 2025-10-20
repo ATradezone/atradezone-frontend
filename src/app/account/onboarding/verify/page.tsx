@@ -79,34 +79,37 @@ export default function VerifyAccount() {
               </p>
             </div>
 
-            <Alert
-              message="Important"
-              description={
-                <div className="text-left text-xs" style={{ fontFamily: "'Afacad', sans-serif" }}>
-                  <p className="font-semibold">Verification link expires in {remainingHours} hours.</p>
-                  <p>Please verify your account within this time period.</p>
-                </div>
-              }
-              type="warning"
-              showIcon
-              className="mb-4 text-left"
-              style={{ padding: '0.7rem' }}
-            />
+            {/* Alerts with consistent spacing */}
+            <div className="space-y-6">
+              <Alert
+                message="Important"
+                description={
+                  <div className="text-left text-xs">
+                    <p className="font-semibold">Verification link expires in {remainingHours} hours.</p>
+                    <p>Please verify your account within this time period.</p>
+                  </div>
+                }
+                type="warning"
+                showIcon
+                className="text-left"
+                style={{ padding: '0.7rem' }}
+              />
 
-            <Alert
-              message="Didn't receive the email?"
-              description={
-                <div className="text-left text-xs" style={{ fontFamily: "'Afacad', sans-serif" }}>
-                  <p>• Check your spam folder</p>
-                  <p>• Make sure you entered the correct email address</p>
-                  <p>• Wait a few minutes for the email to arrive</p>
-                </div>
-              }
-              type="info"
-              showIcon
-              className="mb-8 text-left"
-              style={{ padding: '0.7rem' }}
-            />
+              <Alert
+                message="Didn't receive the email?"
+                description={
+                  <div className="text-left text-xs">
+                    <p>• Check your spam folder</p>
+                    <p>• Make sure you entered the correct email address</p>
+                    <p>• Wait a few minutes for the email to arrive</p>
+                  </div>
+                }
+                type="info"
+                showIcon
+                className="text-left"
+                style={{ padding: '0.7rem' }}
+              />
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-3 mt-5">
               <Button
@@ -134,7 +137,7 @@ export default function VerifyAccount() {
       {showFeedback && (
         <Feedback
           message="Email Resent Successfully"
-          description="We've resent the verification email to your inbox.\nlease check your email and follow the instructions to verify your account."
+          description="We've resent the verification email to your inbox.\nPlease check your email and follow the instructions to verify your account."
           mode="live"
           duration={5000}
           onClose={() => setShowFeedback(false)}

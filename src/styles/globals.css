@@ -206,7 +206,8 @@ div.ant-tour div.ant-tour-mask {
 .ant-layout,
 .ant-menu-item,
 .ant-menu-submenu-title,
-.ant-menu-item-group-title {
+.ant-menu-item-group-title,
+.ant-alert {
   font-family: var(--font-primary) !important;
 }
 
