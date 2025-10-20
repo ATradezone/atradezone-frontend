@@ -169,7 +169,7 @@ export default function Register() {
                 name="phoneNumber"
                 label={<span className="text-gray-700 font-semibold text-sm sm:text-base" style={{ fontFamily: "'Afacad', sans-serif" }}>Phone Number</span>}
                 rules={[
-                  { required: true, message: 'Please enter phone number' },
+                  { required: true, message: 'Please enter phone no.' },
                 ]}
                 className="!mb-1" 
               >

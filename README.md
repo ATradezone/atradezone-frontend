@@ -282,3 +282,11 @@ git branch
 git pull origin main
 git push origin main
 git push origin main --force
+
+git branch
+
+git status
+git add .
+git commit -m "Comment"
+git push origin main
+git push origin main
