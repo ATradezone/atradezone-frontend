@@ -2,7 +2,9 @@
 
 const AuthBranding = () => {
   return (
-    <div className="hidden md:flex md:w-full lg:w-1/2 md:h-48 lg:h-auto flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-28 text-white relative overflow-hidden mt-8" style={{ marginTop: '2rem' }}>
+    <div className="hidden md:flex md:w-full lg:w-1/2 md:h-48 lg:h-auto flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-28 text-white relative overflow-hidden" style={{
+      //backgroundColor: '#000000',
+    }}>
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat min-h-screen"
