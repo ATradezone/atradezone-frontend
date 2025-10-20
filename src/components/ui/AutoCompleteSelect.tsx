@@ -24,6 +24,7 @@ interface AutoCompleteSelectProps {
   actionButton?: {
     icon: React.ReactNode;
     onClick: () => void;
+    title?: string;
   };
   swapActionButtonPosition?: boolean; // New prop to control positioning
   showClearButton?: boolean; // New prop to show/hide clear button
@@ -294,6 +295,7 @@ const AutoCompleteSelect = ({
                   isFocused ? 'border-l-2 border-blue-500' : 'border-l border-gray-300'
                 }`}
                 style={{ width: '2.5rem', marginRight: '-2px' }}
+                title={actionButton.title || 'Click to detect location'}
               >
                 {actionButton.icon}
               </button>
@@ -324,6 +326,7 @@ const AutoCompleteSelect = ({
                   isFocused ? 'border-l-2 border-blue-500' : 'border-l border-gray-300'
                 }`}
                 style={{ width: '2.5rem', marginRight: '-1.6rem' }}
+                title={actionButton.title || 'Click to detect location'}
               >
                 {actionButton.icon}
               </button>
