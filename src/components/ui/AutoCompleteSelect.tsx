@@ -228,7 +228,7 @@ const AutoCompleteSelect = ({
   };
 
   return (
-    <div className={className} ref={wrapperRef}>
+    <div className={className} ref={wrapperRef} style={{ marginRight: '0.8rem' }}>
       {label && (
         <label className="block text-sm font-medium text-gray-700 mb-2">
           {label}
@@ -262,7 +262,7 @@ const AutoCompleteSelect = ({
             fontFamily: 'Afacad, sans-serif', 
             fontSize: '16px', 
             color: '#7d7d7d',
-            border: '1px solid #d9d9d9',
+            border: '1px solid #eaecf0',
             borderRadius: '8px'
           }}
         />
